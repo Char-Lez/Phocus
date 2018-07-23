@@ -1,0 +1,24 @@
+<!--foundation_configuration.tem-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="security" content="D417680A40DB39454E947F78337AA549">
+		<title>Foundation - Configuration</title>
+	</head>
+	<body>
+		<br>
+		<center>
+			<img src="./images/_core/logo.png" style="height:200px;" alt="Foundation Logo">
+			<br>
+			<br>
+			<br>
+			
+		</center>
+		<pre>
+		</pre>
+	</body>
+</html>
+<!--foundation_configuration.tem-->
