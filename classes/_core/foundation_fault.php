@@ -2,24 +2,6 @@
 	//
 	// foundation_fault.php
 	//
-	/**
-	*
-	* This code is created and owned by Char-Lez Braden.
-	*
-	* It is licensed to the Dave Nolan Society, free of charge, in perpetuity
-	* for any purpose, including revenue generating purposes.
-	* It may be copied, modified, published, transfered and distrbuted.
-	* Modifications and derivative works become the property of Char-Lez Braden.
-	* Modifications and derivative works are also licensed to the Dave Nolan Society
-	* free of charge, in perpetuity for any purpse including revenue generating purposes.
-	* Char-Lez Braden, his heirs, successors and appointees may use this code, and its
-	* modified or derivative works for any purpose what so ever and no part of this license
-	* shall be construed as an exclusive license to the Dave Nolan Society.
-	*
-	* @author		Char-Lez Braden
-  * @version	4.0
-  * @since		2018-06-10
-	*/
 	class foundation_fault extends Exception
 	{
 		private $data;

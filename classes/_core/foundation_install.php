@@ -36,6 +36,10 @@
 						{
 							$value='FALSE';
 						} // if ($value===TRUE)
+						//
+						$form_radio_group->add_token('SETTING', $setting);
+						//
+						$form_radio->add_token(''
 					}
 					else
 					{
