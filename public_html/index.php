@@ -1034,6 +1034,50 @@
 		} // confirm_string()
 		//
 		//
+		function get_ini()
+		{
+			try
+			{
+				$arg_count=func_num_args();
+				switch ($arg_count)
+				{
+					case 0: {
+						$result=$system->get_ini();
+					break; }
+					//
+					case 1: {
+						$ini=func_get_arg(0);
+						//
+						confirm_string($ini);
+						confirm_array_element($ini, $this->ini);
+						//
+						$result=$system->get_ini($ini);
+					break; }
+					//
+					case 2: {
+						$ini=func_get_arg(0);
+						$optional=func_get_arg(1);
+						//
+						confirm_string($ini);
+						confirm_int($optional);
+						//
+						$result=$system->get_ini($ini, foundation_system::INI_OPTIONAL);
+					break; }
+					//
+					default: {
+						throw new foundation_fault('Invalid argument count', $arg_count);
+					break; }
+				} // switch ($arg_count)
+				//
+				return $result;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Cannot return ini', '', $e);
+			} // try
+		} // get_ini()
+		//
+		//
 		function my_base64_decode($encoded)
 		{
 			try
@@ -1081,8 +1125,6 @@
 		*/
 		function my_mail($to, $to_name, $subject, $body)
 		{
-			global $app;
-			//
 			try
 			{
 				//////////////////////////
@@ -1120,13 +1162,12 @@
 				// SEND MAIL //
 				///////////////
 				//
-				$config=$app->get_config();
-				$debug=$config->get_SMTP_debug();
-				$host=$config->get_SMTP_host();
-				$username=$config->get_SMTP_user();
-				$password=$config->get_SMTP_password();
-				$from_address=$config->get_SMTP_from_address();
-				$from_name=$config->get_SMTP_from_name();
+				$debug=get_ini('SMTP_debug');
+				$host=get_ini('SMTP_host');
+				$username=get_ini('SMTP_user');
+				$password=get_ini('SMTP_password');
+				$from_address=get_ini('SMTP_from_address');
+				$from_name=get_ini('SMTP_from_name');
 				//
 				$mail=new PHPMailer(true);
 				$mail->SMTPDebug=$debug;
@@ -1289,7 +1330,6 @@
 		function query()
 		{
 			global $database;
-			global $app;
 			//
 			try
 			{
@@ -1373,7 +1413,7 @@
 				{
 					// No database connection
 					// Connect to the database
-					$database=new database($app->get_ini());
+					$database=new database(get_ini('database_host'), get_ini('database_user'), get_ini('database_password'), get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1411,7 +1451,6 @@
 		function query_fetch_all_unique()
 		{
 			global $database;
-			global $app;
 			//
 			try
 			{
@@ -1498,7 +1537,7 @@
 				{
 					// No database connection
 					// Connect to the database
-					$database=new database($app->get_config());
+					$database=new database(get_ini('database_host'), get_ini('database_user'), get_ini('database_password'), get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1726,19 +1765,22 @@
 		//
 		spl_autoload_register('class_autoloader');
 		//
-		$app=new foundation_application();
-		$show_debug=$app->get_ini('show_debug', foundation_application::INI_OPTIONAL);
-		$response=$app->render();
+		$system=new foundation_system();
+		$show_debug=get_ini('show_debug', foundation_system::INI_OPTIONAL);
+		$response=$system->render();
 	}
 	catch (Throwable $e)
 	{
+		// Are we showing debug info?
 		if ($show_debug===TRUE)
 		{
+			// Yes, show tghe debug info
 			$debug_info=date('Y/m/d H:i:s', time())."\n";
 			$debug_info.=$e->__toString();
 		}
 		else
 		{
+			// No, squelch the debug info
 			$debug_info='';
 		} // if ($show_debug===TRUE)
 		//
