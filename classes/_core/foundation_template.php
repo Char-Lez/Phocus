@@ -63,12 +63,7 @@
 				// Load the template //
 				///////////////////////
 				//
-				$target='../templates/'.$sub.$file_name;
-				$this->content=@file_get_contents($target);
-				if ($this->content===FALSE)
-				{
-					throw new foundation_fault('Could not load template', $target);
-				} // if ($this->content===FALSE)
+				$this->content=file_read('../templates/'.$sub.$file_name);
 				//
 				//
 				///////////////////////////

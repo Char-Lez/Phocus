@@ -1580,6 +1580,46 @@
 		} // query_fetch_all_unique()
 		//
 		//
+		function file_read($path)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 1);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($path);
+				//
+				//
+				///////////////////
+				// Read the file //
+				///////////////////
+				//
+				$data=@file_get_contents($path);
+				// Did the file read?
+				if ($data===FALSE)
+				{
+					// No, did not read
+					throw new foundation_fault('File did not read', $path);
+				} // if ($data===FALSE)
+				//
+				return $data;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not read file', '', $e);
+			} // try
+		} // file_read()
+		//
+		//
 		function file_save($path, $data)
 		{
 			try
@@ -1600,7 +1640,13 @@
 				confirm_string($data);
 				//
 				//
-				@file_put_contents($path, $data);
+				$saved=@file_put_contents($path, $data);
+				// Did the file save?
+				if ($saved===FALSE)
+				{
+					// No, did not save
+					throw new foundation_fault('File not saved', $path);
+				} // if ($saved===FALSE)
 				//
 				return TRUE;
 			}
