@@ -7,8 +7,10 @@
 		const INI_OPTIONAL = 1;
 		//
 		private $application_class_name;
+		private $class_file;
 		private $database;
 		private $ini;
+		private $ini_file;
 		//
 		//
 		public function __construct($application_class_name='')
@@ -23,11 +25,7 @@
 				switch ($arg_count)
 				{
 					case 0: {
-						$application_class_name=get_application_name();
-						//if ($application_class_name==='index')
-						//{
-						//	$application_class_name='foundation_application';
-						//} // if ($application_class_name==='index')
+						$application_class_name=get_application_class_name();
 					break; }
 					//
 					case 1: {
@@ -61,7 +59,7 @@
 				$this->database=FALSE;
 				//
 				$ini_file=$application_class_name.'.ini';
-				$target='../'.$ini_file;
+				$this->ini_file='../'.$ini_file;
 				//
 				// Are we looking for index.ini?
 				if ($application_class_name==='index')
@@ -69,20 +67,26 @@
 					// Yes, looking for index.ini
 					//
 					// Does the ini file exist?
-					if (file_exists($target)!==TRUE)
+					if (file_exists($this->ini_file)!==TRUE)
 					{
 						// No, index.ini does not exist
 						//
 						// Let's try to get the installation sample ini
-						//
-						$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
-						//
-						file_save($target, $template->render());
+						// But ets not overwrite something that already exists
+						// Does foundation_application.ini exist?
+						if (file_exists('../foundation_application.ini')!==TRUE)
+						{
+							// No, does not exist
+							$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
+							//
+							$data=$template->render();
+							file_save($this->ini_file, $data);
+						} // if (file_exists('/.foundation_application.ini')!==TRUE)
 					} // if (file_exists($target)!==TRUE)
 					//
 					// Does the class file exist?
-					$t2='../classes/'.$application_class_name.'.php';
-					if (file_exists($t2)!==TRUE)
+					$this->class_file='../classes/'.$application_class_name.'.php';
+					if (file_exists($this->class_file)!==TRUE)
 					{
 						// No, index.php does not exist
 						//
@@ -92,19 +96,19 @@
 					{
 						// Yes, found it
 						$this->application_class_name=$application_class_name;
-					} // if (file_exists($t2)!==TRUE)
+					} // if (file_exists($this->class_file)!==TRUE)
 				} // if ($application_class_name==='index')
 				//
 				// Does the ini file exist now?
-				if (file_exists($target)!==TRUE)
+				if (file_exists($this->ini_file)!==TRUE)
 				{
 					// No, ini file is missing
-					throw new foundation_fault('Missing ini file', $ini_file);
+					throw new foundation_fault('Missing ini file', $this->ini_file);
 				}
 				else
 				{
 					// Yes, exists
-					$this->ini=@parse_ini_file($target, FALSE, INI_SCANNER_TYPED);
+					$this->ini=@parse_ini_file($this->ini_file, FALSE, INI_SCANNER_TYPED);
 					//
 					// Did it parse?
 					if ($this->ini===FALSE)
@@ -112,7 +116,7 @@
 						// No, did not parse
 						throw new foundation_fault('Could not parse ini', $ini_file);
 					} // if ($this->ini===FALSE)
-				} // if (file_exists($target)!==TRUE)
+				} // if (file_exists($this->ini_file)!==TRUE)
 				//
 				return;
 			}
@@ -121,6 +125,66 @@
 				throw new foundation_fault('Cannot create new Foundation application', '', $e);
 			} // try
 		} // __construct()
+		//
+		//
+		public function get_class_file()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				return $this->class_file;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get class_file', $e);
+			} // try
+		} // get_class_file()
+		//
+		//
+		public function get_application_class_name()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				return $this->application_class_name;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get application_class_name', $e);
+			} // try
+		} // get_application_class_name()
+		//
+		//
+		public function get_database()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				return $this->database;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get database', $e);
+			} // try
+		} // get_database()
 		//
 		//
 		public function get_ini()
@@ -177,6 +241,26 @@
 				throw new foundation_fault('Cannot return ini', '', $e);
 			} // try
 		} // get_ini()
+		//
+		//
+		public function get_ini_file()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				return $this->ini_file;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get ini_file', $e);
+			} // try
+		} // get_ini_file()
 		//
 		//
 		public function render()

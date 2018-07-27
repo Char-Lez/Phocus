@@ -1019,7 +1019,7 @@
 		} // confirm_string()
 		//
 		//
-		function get_application_name()
+		function get_application_class_name()
 		{
 			try
 			{
@@ -1037,15 +1037,15 @@
 			{
 				throw new foundation_fault('Could not get application name', '', $e);
 			} // try
-		} // get_application_name()
+		} // get_application_class_name()
 		//
 		//
 		function get_ini()
 		{
-			global $system;
-			//
 			try
 			{
+				global $system;
+				//
 				$arg_count=func_num_args();
 				switch ($arg_count)
 				{
@@ -1084,6 +1084,36 @@
 				throw new foundation_fault('Cannot return ini', '', $e);
 			} // try
 		} // get_ini()
+		//
+		//
+		function get_ini_file()
+		{
+			try
+			{
+				global $system;
+				//
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				if ($arg_count!==0)
+				{
+					throw new foundation_fault("Invalid args [$arg_count]", origin());
+				} // if ($arg_count!==0)
+				//
+				//
+				//////////////////////
+				// Return the value //
+				//////////////////////
+				//
+				return $system->get_ini_file();
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Cannot return ini', '', $e);
+			} // try
+		} // get_ini_file()
 		//
 		//
 		function my_base64_decode($encoded)
