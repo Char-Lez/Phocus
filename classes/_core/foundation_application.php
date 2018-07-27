@@ -23,7 +23,7 @@
 				$form_radio_group=new foundation_template('foundation_configuration_setting_radio_group.snip', foundation_template::CORE);
 				$form_radio=new foundation_template('foundation_configuration_setting_radio.snip', foundation_template::CORE);
 				//
-				foreach($app->get_ini() as $setting=>$value)
+				foreach(get_ini() as $setting=>$value)
 				{
 					if (is_bool($value)===TRUE)
 					{
@@ -39,7 +39,38 @@
 						//
 						$form_radio_group->add_token('SETTING', $setting);
 						//
-						$form_radio->add_token(''
+						// TRUE
+						$form_radio->add_token('NAME', $setting);
+						$form_radio->add_token('VALUE', 'TRUE');
+						$form_radio->add_token('DISPLAY', 'True');
+						if ($value===TRUE)
+						{
+							$form_radio->add_token('STATUS', 'CHECKED');
+						}
+						else
+						{
+							$form_radio->add_token('STATUS', '');
+						} // if ($value===TRUE)
+						//
+						$form_radio_group->append_snippet('RADIO_BUTTONS', $form_radio);
+						//
+						// FALSE
+						$form_radio->add_token('VALUE', 'FALSE');
+						$form_radio->add_token('DISPLAY', 'False');
+						if ($value===FALSE)
+						{
+							$form_radio->add_token('STATUS', '');
+						}
+						else
+						{
+							$form_radio->add_token('STATUS', 'CHECKED');
+						} // if ($value===FALSE)
+						//
+						$form_radio_group->append_snippet('RADIO_BUTTONS', $form_radio);
+						//
+						$main->append_snippet('FORM_FIELDS', $form_radio_group);
+						//
+						$form_radio_group->clear();
 					}
 					else
 					{
@@ -47,10 +78,10 @@
 						//
 						$form_field->add_token('SETTING', $setting);
 						$form_field->add_token('VALUE', $value);
+						//
+						$main->append_snippet('FORM_FIELDS', $form_field);
 					} // if (is_bool($value))
-					//
-					$main->append_snippet('FORM_FIELDS', $form_field);
-				} // foreach($app->get_ini() as $setting=>$value)
+				} // foreach(get_ini() as $setting=>$value)
 				//
 				return $main->render();
 			}

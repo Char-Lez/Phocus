@@ -246,6 +246,34 @@
 		} // add_token_array()
 		//
 		//
+		public function clear()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				////////////////////
+				// Clear snippets //
+				////////////////////
+				//
+				$this->clear_snippets();
+				$this->clear_tokens();
+				//
+				return;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not clear', '', $e);
+			} // try
+		} // clear ()
+		//
+		//
 		public function clear_snippets()
 		{
 			try

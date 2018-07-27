@@ -46,7 +46,7 @@
 					case 'foundation_database': 
 					case 'foundation_fault': 
 					case 'foundation_template': 
-					case 'foundation_install': {
+					case 'foundation_system': {
 						$sub='_core/';
 					break; }
 					//
@@ -302,7 +302,7 @@
 		* @param $total [int] = The number of arguments present
 		* @param $target [int] = $ht number of arguments needed
 		*/
-		function confirm_args($total, $target)
+		function confirm_args($arg_count, $target)
 		{
 			try
 			{
@@ -310,45 +310,30 @@
 				// Check argument count //
 				//////////////////////////
 				//
-				$arg_count=func_num_args();
-				if ($arg_count!==2)
+				$arg_count2=func_num_args();
+				if ($arg_count2!==2)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
-				} // if ($arg_count!==2)
+					throw new foundation_fault("Invalid args [$arg_count2]", origin());
+				} // if ($arg_count2!==2)
 				//
-				if (is_int($total)!==TRUE)
-				{
-					$backtrace=debug_backtrace();			
-					//
-					$origin=backtrace_origin($backtrace, 1);
-					//
-					throw new foundation_fault('$total is ['.gettype($total).'] not int', $origin);
-				} // if (is_int($total)!==TRUE)
-				//
-				if (is_int($target)!==TRUE)
-				{
-					$backtrace=debug_backtrace();
-					//
-					$origin=backtrace_origin($backtrace, 1);
-					//
-					throw new foundation_fault('$target is ['.gettype($target).'] not int', $origin);
-				} // if (is_int($total)!==TRUE)
+				confirm_int($arg_count);
+				confirm_int($target);
 				//
 				//
 				//////////////////////
 				// Confirm the args //
 				//////////////////////
 				//
-				if ($total!==$target)
+				if ($arg_count!==$target)
 				{
-					throw new fault ("Invalid arg count: $total", origin());
-				} // if ($total!==$target)
+					throw new fault ("Invalid arg count: $arg_count", origin());
+				} // if ($arg_count!==$target)
 				//
 				return TRUE;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm args', '', $e);
+				throw new foundation_fault('Could not confirm arg count', '', $e);
 			} // try
 		} // confirm_args()
 		//
@@ -1034,8 +1019,31 @@
 		} // confirm_string()
 		//
 		//
+		function get_application_name()
+		{
+			try
+			{
+				$pieces=explode('/', __FILE__);
+				//
+				$last=end($pieces);
+				//
+				$parts=explode('.', $last);
+				//
+				$name=array_shift($parts);
+				//
+				return $name;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get application name', '', $e);
+			} // try
+		} // get_application_name()
+		//
+		//
 		function get_ini()
 		{
+			global $system;
+			//
 			try
 			{
 				$arg_count=func_num_args();
@@ -1570,6 +1578,37 @@
 				throw new foundation_fault('Could not do query', '', $e);
 			} // try
 		} // query_fetch_all_unique()
+		//
+		//
+		function file_save($path, $data)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 2);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($path);
+				confirm_string($data);
+				//
+				//
+				@file_put_contents($path, $data);
+				//
+				return TRUE;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not save file', '', $e);
+			} // try
+		} // file_save()
 		//
 		//
 		/**

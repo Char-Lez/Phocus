@@ -73,7 +73,7 @@
 						if (($class!=='foundation_fault') && ($class!=='Exception') && ($class!=='Error'))
 						{
 							// Not the right class
-							throw new fault("previous is not class foundation_fault, Exception, or Error: [$class]", origin());
+							throw new foundation_fault("previous is not class foundation_fault, Exception, or Error: [$class]", origin());
 						} // if (($class!=='fault') && ($class!=='Exception') && ($class!=='Error'))
 					} // if (is_object($previous)===FALSE)
 				} // if (is_null($previous)===FALSE)

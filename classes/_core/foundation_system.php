@@ -11,7 +11,7 @@
 		private $ini;
 		//
 		//
-		public function __construct($configuration_file='')
+		public function __construct($application_class_name='')
 		{
 			try
 			{
@@ -23,11 +23,15 @@
 				switch ($arg_count)
 				{
 					case 0: {
-						$configuration_file='foundation';
+						$application_class_name=get_application_name();
+						//if ($application_class_name==='index')
+						//{
+						//	$application_class_name='foundation_application';
+						//} // if ($application_class_name==='index')
 					break; }
 					//
 					case 1: {
-						$configuration_file=func_get_args(0);
+						$application_class_name=func_get_args(0);
 					break; }
 					//
 					default: {
@@ -40,14 +44,14 @@
 				// Check data types //
 				//////////////////////
 				//
-				confirm_string($configuration_file);
+				confirm_string($application_class_name);
 				//
 				//
 				//////////////////
 				// Sanity Check //
 				//////////////////
 				//
-				confirm_path_safe($configuration_file);
+				confirm_path_safe($application_class_name);
 				//
 				//
 				///////////////////////////////
@@ -56,13 +60,46 @@
 				//
 				$this->database=FALSE;
 				//
-				$target='../'.$configuration_file.'.ini';
+				$ini_file=$application_class_name.'.ini';
+				$target='../'.$ini_file;
 				//
-				// Does the ini file exist?
+				// Are we looking for index.ini?
+				if ($application_class_name==='index')
+				{
+					// Yes, looking for index.ini
+					//
+					// Does the ini file exist?
+					if (file_exists($target)!==TRUE)
+					{
+						// No, index.ini does not exist
+						//
+						// Let's try to get the installation sample ini
+						//
+						$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
+						//
+						file_save($target, $template->render());
+					} // if (file_exists($target)!==TRUE)
+					//
+					// Does the class file exist?
+					$t2='../classes/'.$application_class_name.'.php';
+					if (file_exists($t2)!==TRUE)
+					{
+						// No, index.php does not exist
+						//
+						$this->application_class_name='foundation_application';
+					}
+					else
+					{
+						// Yes, found it
+						$this->application_class_name=$application_class_name;
+					} // if (file_exists($t2)!==TRUE)
+				} // if ($application_class_name==='index')
+				//
+				// Does the ini file exist now?
 				if (file_exists($target)!==TRUE)
 				{
 					// No, ini file is missing
-					throw new foundation_fault('Missing ini file', $configuration_file);
+					throw new foundation_fault('Missing ini file', $ini_file);
 				}
 				else
 				{
@@ -73,19 +110,7 @@
 					if ($this->ini===FALSE)
 					{
 						// No, did not parse
-						throw new foundation_fault('Could not parse ini', $configuration_file);
-					}
-					else
-					{
-						// Yes, parsed
-						$this->application_class_name=$this->get_ini('application_class_name', foundation_application::INI_OPTIONAL);
-						//
-						// Does the application class name exist?
-						if ($this->application_class_name===FALSE)
-						{
-							// No, missing
-							$this->application_class_name='FOUNDATION';
-						} // if ($this->application_class_name===FALSE)
+						throw new foundation_fault('Could not parse ini', $ini_file);
 					} // if ($this->ini===FALSE)
 				} // if (file_exists($target)!==TRUE)
 				//
