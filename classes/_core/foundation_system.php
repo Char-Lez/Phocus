@@ -6,17 +6,17 @@
 	{
 		const INI_OPTIONAL = 1;
 		//
-		private $application_class_name;
-		private $class_file;
-		private $database;
+		//private $application_class_path;
+		private $application_ini_path;
+		private $application_name;
 		private $ini;
-		private $ini_file;
 		//
 		//
-		public function __construct($application_class_name='')
+		public function __construct($application_name='')
 		{
 			try
 			{
+trace("\$application_name=$application_name");
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -25,109 +25,107 @@
 				switch ($arg_count)
 				{
 					case 0: {
-						$application_class_name=get_application_class_name();
+						$this->application_name=application_name();
 					break; }
 					//
 					case 1: {
-						$application_class_name=func_get_args(0);
+						$this->application_name=func_get_args(0);
 					break; }
 					//
 					default: {
 						throw new foundation_fault('Invalid argument count', $arg_count);
 					break; }
 				} // switch ($arg_count)
+trace("\$this->application_name={$this->application_name}");
 				//
 				//
 				//////////////////////
 				// Check data types //
 				//////////////////////
 				//
-				confirm_string($application_class_name);
+				confirm_string($this->application_name);
 				//
 				//
 				//////////////////
 				// Sanity Check //
 				//////////////////
 				//
-				confirm_path_safe($application_class_name);
+				confirm_path_safe($this->application_name);
 				//
 				//
 				///////////////////////////////
 				// Construct the application //
 				///////////////////////////////
 				//
-				$this->database=FALSE;
+				//$this->database=FALSE;
 				//
-				$ini_file=$application_class_name.'.ini';
-				$this->ini_file='../'.$ini_file;
+				$this->application_ini_path='../'.$this->application_name.'.ini';
+trace("\$this->application_ini_path={$this->application_ini_path}");
 				//
-				// Are we looking for index.ini?
-				if ($application_class_name==='index')
+				// Does the ini file exist?
+				if (file_exists($this->application_ini_path)!==TRUE)
 				{
-					// Yes, looking for index.ini
+					// No, ini does not exist
 					//
-					// Does the ini file exist?
-					if (file_exists($this->ini_file)!==TRUE)
-					{
-						// No, index.ini does not exist
-						//
-						// Let's try to get the installation sample ini
-						// But ets not overwrite something that already exists
-						// Does foundation_application.ini exist?
-						if (file_exists('../foundation_application.ini')!==TRUE)
-						{
-							// No, does not exist
-							$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
-							//
-							$data=$template->render();
-							file_save($this->ini_file, $data);
-						} // if (file_exists('/.foundation_application.ini')!==TRUE)
-					} // if (file_exists($target)!==TRUE)
+					// Let's try to get the installation sample ini
+					$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
 					//
-					// Does the class file exist?
-					$this->class_file='../classes/'.$application_class_name.'.php';
-					if (file_exists($this->class_file)!==TRUE)
-					{
-						// No, index.php does not exist
-						//
-						$this->application_class_name='foundation_application';
-					}
-					else
-					{
-						// Yes, found it
-						$this->application_class_name=$application_class_name;
-					} // if (file_exists($this->class_file)!==TRUE)
-				} // if ($application_class_name==='index')
+					$template->add_token('DATABASE_HOST', '');
+					$template->add_token('DATABASE_USER', '');
+					$template->add_token('DATABASE_PASSWORD', '');
+					$template->add_token('DATABASE_NAME', '');
+					$template->add_token('SMTP_HOST', '');
+					$template->add_token('SMTP_USER', '');
+					$template->add_token('SMTP_PASSWORD', '');
+					$template->add_token('SMTP_FROM_ADDRESS', '');
+					$template->add_token('SMTP_FROM_NAME', '');
+					//
+					$data=$template->render();
+					file_save($this->application_ini_path, $data);
+				} // if (file_exists($this->application_ini_path)!==TRUE)
 				//
 				// Does the ini file exist now?
-				if (file_exists($this->ini_file)!==TRUE)
+				if (file_exists($this->application_ini_path)!==TRUE)
 				{
 					// No, ini file is missing
-					throw new foundation_fault('Missing ini file', $this->ini_file);
+					throw new foundation_fault('Missing ini file', $this->application_ini_path);
 				}
 				else
 				{
 					// Yes, exists
-					$this->ini=@parse_ini_file($this->ini_file, FALSE, INI_SCANNER_TYPED);
+					$this->ini=@parse_ini_file($this->application_ini_path, FALSE, INI_SCANNER_TYPED);
 					//
 					// Did it parse?
 					if ($this->ini===FALSE)
 					{
 						// No, did not parse
-						throw new foundation_fault('Could not parse ini', $ini_file);
+						throw new foundation_fault('Could not parse ini', $this->application_ini_path);
 					} // if ($this->ini===FALSE)
-				} // if (file_exists($this->ini_file)!==TRUE)
+				} // if (file_exists($this->application_ini_path)!==TRUE)
+				//
+				// ALWAYS CHECK THIS AFTER THE INI FILE
+				// Does the application class file exist?
+				$application_class_path='../classes/'.$this->application_name.'.php';
+				if (file_exists($application_class_path)!==TRUE)
+				{
+					// No, application class file does not exist
+					//
+					// Drop to the generic application
+					$this->application_name='foundation_application';
+				} // if (file_exists($application_class_path)!==TRUE)
+trace("\$this->application_name={$this->application_name}");
 				//
 				return;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot create new Foundation application', '', $e);
+				throw new foundation_fault('Cannot launch Foundation System', '', $e);
 			} // try
 		} // __construct()
 		//
 		//
-		public function get_class_file()
+		/*
+		public function get_application_class_path()
 		{
 			try
 			{
@@ -138,35 +136,17 @@
 				$arg_count=func_num_args();
 				confirm_args($arg_count, 0);
 				//
-				return $this->class_file;
+				return $this->application_class_path;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get class_file', $e);
+				throw new foundation_fault('Could not get application_class_path', $e);
 			} // try
-		} // get_class_file()
+		} // get_application_class_path()
+		*/
 		//
 		//
-		public function get_application_class_name()
-		{
-			try
-			{
-				//////////////////////////
-				// Check argument count //
-				//////////////////////////
-				//
-				$arg_count=func_num_args();
-				confirm_args($arg_count, 0);
-				//
-				return $this->application_class_name;
-			}
-			catch (Throwable $e)
-			{
-				throw new foundation_fault('Could not get application_class_name', $e);
-			} // try
-		} // get_application_class_name()
-		//
-		//
+		/*
 		public function get_database()
 		{
 			try
@@ -185,6 +165,7 @@
 				throw new foundation_fault('Could not get database', $e);
 			} // try
 		} // get_database()
+		*/
 		//
 		//
 		public function get_ini()
@@ -243,7 +224,7 @@
 		} // get_ini()
 		//
 		//
-		public function get_ini_file()
+		public function get_application_ini_path()
 		{
 			try
 			{
@@ -254,13 +235,13 @@
 				$arg_count=func_num_args();
 				confirm_args($arg_count, 0);
 				//
-				return $this->ini_file;
+				return $this->application_ini_path;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get ini_file', $e);
+				throw new foundation_fault('Could not get application_ini_path', $e);
 			} // try
-		} // get_ini_file()
+		} // get_application_ini_path()
 		//
 		//
 		public function render()
@@ -313,19 +294,19 @@
 				} // if (array_key_exists('command', $_POST)===TRUE)
 				//
 				// Create the application object
-				$app=new $this->application_class_name;
+				$application=new $this->application_name;
 				//
 				// Does the command exist?
-				if (method_exists($app, $command)!==TRUE)
+				if (method_exists($application, $command)!==TRUE)
 				{
 					// No, command is missing
-					throw new foundation_fault("Invalid command [$command]", '');
+					throw new foundation_fault('Invalid command', $command);
 				}
 				else
 				{
 					// Ywa, command exists
-					$response=$app->$command();
-				} // if (method_exists($app, $command)!==TRUE)
+					$response=$application->$command();
+				} // if (method_exists($application, $command)!==TRUE)
 				//
 				//
 				return $response;

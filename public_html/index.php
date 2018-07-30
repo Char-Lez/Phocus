@@ -44,6 +44,7 @@
 				{
 					case 'foundation_application': 
 					case 'foundation_database': 
+					case 'foundation_ini': 
 					case 'foundation_fault': 
 					case 'foundation_template': 
 					case 'foundation_system': {
@@ -74,6 +75,97 @@
 				throw new Exception("Could not load class file: [$class_name]", __LINE__, $e);
 			} // try
 		} // class_autoloader()
+		//
+		//
+		/**
+		* <h1>Applcation Class</h1>
+		* Determines the proper application class name
+		* Helps deal with missing classes which is likely the
+		* case in new installations
+		*
+		* @param application_name [string]
+		* @return string
+		*/
+		function application_class($application_name)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				if ($arg_count!==1)
+				{
+					throw new foundation_fault("Invalid args [$arg_count]", origin());
+				} // if ($arg_count!==1)
+				//
+				//
+				if (is_string($application_name)!==TRUE)
+				{
+					throw new foundation_fault('Parameter is not string.  It is ['.gettype($application_name).']', origin());
+				} // if (is_string($application_name)!==TRUE)
+				//
+				//
+				$application_class_path='../classes/'.$application_name.'.php';
+				if (file_exists($application_class_path)!==TRUE)
+				{
+					// No, application class file does not exist
+					//
+					// Drop to the generic application
+					$application_class_name='foundation_application';
+				}
+				else
+				{
+					// Yes, exists
+					$application_class_name=$application_name;
+				} // if (file_exists($application_class_path)!==TRUE)
+				//
+				return $application_class_name;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Cannot get application class', '', $e);
+			} // try
+		} // application_class()
+		//
+		//
+		/**
+		* <h1>Application name</h1>
+		* Determines the application name based on the __FILE__
+		*
+		* @return string
+		*/
+		function application_name()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				if ($arg_count!==0)
+				{
+					throw new foundation_fault("Invalid args [$arg_count]", origin());
+				} // if ($arg_count!==0)
+				//
+				//
+				$pieces=explode('/', __FILE__);
+				//
+				$last=end($pieces);
+				//
+				$parts=explode('.', $last);
+				//
+				$name=array_shift($parts);
+				//
+				return $name;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get application name', '', $e);
+			} // try
+		} // application_name()
 		//
 		//
 		/**
@@ -326,7 +418,7 @@
 				//
 				if ($arg_count!==$target)
 				{
-					throw new fault ("Invalid arg count: $arg_count", origin());
+					throw new foundation_fault("Invalid arg count: $arg_count", origin());
 				} // if ($arg_count!==$target)
 				//
 				return TRUE;
@@ -1019,104 +1111,14 @@
 		} // confirm_string()
 		//
 		//
-		function get_application_class_name()
-		{
-			try
-			{
-				$pieces=explode('/', __FILE__);
-				//
-				$last=end($pieces);
-				//
-				$parts=explode('.', $last);
-				//
-				$name=array_shift($parts);
-				//
-				return $name;
-			}
-			catch (Throwable $e)
-			{
-				throw new foundation_fault('Could not get application name', '', $e);
-			} // try
-		} // get_application_class_name()
-		//
-		//
-		function get_ini()
-		{
-			try
-			{
-				global $system;
-				//
-				$arg_count=func_num_args();
-				switch ($arg_count)
-				{
-					case 0: {
-						$result=$system->get_ini();
-					break; }
-					//
-					case 1: {
-						$ini=func_get_arg(0);
-						//
-						confirm_string($ini);
-						confirm_array_element($ini, $this->ini);
-						//
-						$result=$system->get_ini($ini);
-					break; }
-					//
-					case 2: {
-						$ini=func_get_arg(0);
-						$optional=func_get_arg(1);
-						//
-						confirm_string($ini);
-						confirm_int($optional);
-						//
-						$result=$system->get_ini($ini, foundation_system::INI_OPTIONAL);
-					break; }
-					//
-					default: {
-						throw new foundation_fault('Invalid argument count', $arg_count);
-					break; }
-				} // switch ($arg_count)
-				//
-				return $result;
-			}
-			catch (Throwable $e)
-			{
-				throw new foundation_fault('Cannot return ini', '', $e);
-			} // try
-		} // get_ini()
-		//
-		//
-		function get_ini_file()
-		{
-			try
-			{
-				global $system;
-				//
-				//////////////////////////
-				// Check argument count //
-				//////////////////////////
-				//
-				$arg_count=func_num_args();
-				if ($arg_count!==0)
-				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
-				} // if ($arg_count!==0)
-				//
-				//
-				//////////////////////
-				// Return the value //
-				//////////////////////
-				//
-				return $system->get_ini_file();
-			}
-			catch (Throwable $e)
-			{
-				throw new foundation_fault('Cannot return ini', '', $e);
-			} // try
-		} // get_ini_file()
-		//
-		//
-		function my_base64_decode($encoded)
+		/**
+		* <h1>Do Base 64 Decode</h1>
+		* Decodes a string in base64 and deals with errors
+		* 
+		* @param encoded [string]
+		* @return string
+		*/
+		function do_base64_decode($encoded)
 		{
 			try
 			{
@@ -1153,7 +1155,7 @@
 			{
 				throw new foundation_fault('Cannot base64 decode', '', $e);
 			} // try
-		} // my_base64_decode()
+		} // do_base64_decode()
 		//
 		//
 		/**
@@ -1610,6 +1612,13 @@
 		} // query_fetch_all_unique()
 		//
 		//
+		/**
+		* <h1>file read</h1>
+		* Reads a file and handles errors
+		*
+		* @param $path [string]
+		* @return string
+		*/
 		function file_read($path)
 		{
 			try
@@ -1650,6 +1659,14 @@
 		} // file_read()
 		//
 		//
+		/**
+		* <h1>File Save</h1>
+		* Saves data to a file, and handles errors
+		*
+		* @param $path [string]
+		* @param $data [string]
+		* @return void
+		*/
 		function file_save($path, $data)
 		{
 			try
@@ -1753,7 +1770,12 @@
 				switch ($type)
 				{
 					case 'array': {
-						$message_display="A:[".serialize($message)."]";
+						//$message_display="A:[".serialize($message)."]";
+						$message_display="Array<br>\n";
+						foreach($message as $k=>$v)
+						{
+							$message_display.="$k=>$v<br>\n";
+						} // foreach($message as $k=>$v)
 					break; }
 					//
 					case 'boolean': {
@@ -1880,9 +1902,13 @@
 		//
 		spl_autoload_register('class_autoloader');
 		//
-		$system=new foundation_system();
-		$show_debug=get_ini('show_debug', foundation_system::INI_OPTIONAL);
-		$response=$system->render();
+		$application_name=application_name();
+		$ini=new foundation_ini($application_name);
+		$show_debug=$ini->get_ini('show_debug', foundation_ini::INI_OPTIONAL);
+$show_debug=TRUE;
+		$application_class=application_class($application_name);
+		$application=new $application_class($ini);
+		$response=$application->render(foundation_application::STRICT);
 	}
 	catch (Throwable $e)
 	{

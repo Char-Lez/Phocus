@@ -4,14 +4,32 @@
 	//
 	class foundation_application
 	{
+		const STRICT=1;
+		//
+		private $ini;
 		private $modules;
 		//
 		//
-		public function __construct()
+		public function __construct($ini)
 		{
 			try
 			{
-				load_modules();
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				if ($arg_count!==1)
+				{
+					throw new foundation_fault("Invalid args [$arg_count]", origin());
+				} // if ($arg_count!==1)
+				//
+				confirm_object($ini, 'foundation_ini');
+				//
+				//
+				$this->ini=$ini;
+				//
+				$this->load_modules();
 			}
 			catch (Throwable $e)
 			{
@@ -37,7 +55,7 @@
 				$form_radio_group=new foundation_template('foundation_configuration_setting_radio_group.snip', foundation_template::CORE);
 				$form_radio=new foundation_template('foundation_configuration_setting_radio.snip', foundation_template::CORE);
 				//
-				foreach(get_ini() as $setting=>$value)
+				foreach($this->ini->get_ini() as $setting=>$value)
 				{
 					if (is_bool($value)===TRUE)
 					{
@@ -95,7 +113,9 @@
 						//
 						$main->append_snippet('FORM_FIELDS', $form_field);
 					} // if (is_bool($value))
-				} // foreach(get_ini() as $setting=>$value)
+				} // foreach($this->ini->get_ini() as $setting=>$value)
+				//
+				$main->add_token('FOUNDATION_APPICATION_CLASS', application_name().'.php');
 				//
 				return $main->render();
 			}
@@ -104,6 +124,174 @@
 				throw new foundation_fault('Could not display', '', $e);
 			} // try
 		} // DISPLAY()
+		//
+		//
+		private function load_modules()
+		{
+			try
+			{
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not load modules', '', $e);
+			} // try
+		} // load_modules
+		//
+		//
+		/**
+		* <h1>Render</h1>
+		* Generates rendered output.  Rendering should handle all substitutions
+		*/
+		function render()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				switch ($arg_count)
+				{
+					case 0: {
+						$command='';
+						$strict=FALSE;
+					break; }
+					//
+					case 1: {
+						$arg=func_get_arg(0);
+						if (is_string($arg)===TRUE)
+						{
+							$command=$arg;
+							$strict=FALSE;
+						}
+						else
+						{
+							if (is_int($arg)===TRUE)
+							{
+								if ($arg===foundation_application::STRICT)
+								{
+									$command='';
+									$strict=TRUE;
+								}
+								else
+								{
+									throw new foundation_fault('Invalid option', $arg);
+								} // if ($arg===foundation_appliction::STRICT)
+							} // if (is_int($arg)===TRUE)
+						} // if (is_string($arg)===TRUE)
+					break; }
+					//
+					case 2: {
+						$command=func_get_arg(0);
+						confirm_string($command);
+						$strict=func_get_arg(1);
+						confirm_int($strict);
+						if ($strict!==foundation_application::STRICT)
+						{
+							throw new foundation_fault('Invalid option', $strict);
+						} // if ($strict!==foundation_application::STRICT)
+					break; }
+					//
+					default: {
+						throw new foundation_fault("Invalid args [$arg_count]", origin());
+					break; }
+				} // switch ($arg_count)
+				//
+				//
+				////////////////////////////
+				// Render the application //
+				////////////////////////////
+				//
+				// Is there a declared command?
+				if ($command!=='')
+				{
+					// Yes, declared command
+					// Do nothing more
+				}
+				else
+				{
+					// No, no command declared
+					// Is there a POST command?
+					if (array_key_exists('command', $_POST)===TRUE)
+					{
+						// Yes, has POST command
+						$command=$_POST['command'];
+					}
+					else
+					{
+						// No, missing POST command
+						// Is there a GET command?
+						if (array_key_exists('command', $_GET)===TRUE)
+						{
+							// Yes, has GET command
+							$command=$_GET['command'];
+						}
+						else
+						{
+							// No, missing GET command
+							// Is there a COOKIE command?
+							if (array_key_exists('command', $_COOKIE)===TRUE)
+							{
+								// Yes, has a COOKIE command
+								$command=$_COOKIE['command'];
+							}
+							else
+							{
+								// No, missing COOKIE command
+								// Go with default command
+								$command='DISPLAY';
+							} // if (array_key_exists('command', $_COOKIE)===TRUE)
+						} // if (array_key_exists('command', $_GET)===TRUE)
+					} // if (array_key_exists('command', $_POST)===TRUE)
+				} // if ($command!=='')
+				//
+				// Does the command exist?
+				if (method_exists($this, $command)!==TRUE)
+				{
+					// No, command is missing
+					throw new foundation_fault('Invalid command', $command);
+				}
+				else
+				{
+					// Yes, command exists
+					$response=$this->$command();
+				} // if (method_exists($application, $command)!==TRUE)
+				//
+				// Are we running in strict mode?
+				if ($strict===TRUE)
+				{
+					// Yes, strict mode
+					$matches=array();
+					$match_count=preg_match_all("/#(.*?)#/i", $response, $matches);
+					//
+					if ($match_count===FALSE)
+					{
+						throw new foundation_fault('Token match failed', '');
+					} // if ($match_count===FALSE)
+					//
+					if ($match_count!==0)
+					{
+						$display=implode(', ', $matches[0]);
+						if ($match_count===1)
+						{
+							throw new foundation_fault('Unresolved token found', $display);
+						}
+						else
+						{
+							throw new foundation_fault('Unresolved tokens found', $display);
+						} // if ($match_count===1)
+					} // if ($match_count!==0)
+				} // if ($strict===TRUE)
+				//
+				//
+				return $response;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Cannot render', '', $e);
+			} // try
+		} // render()
 		//
 		//
 		public function SAVE()
@@ -134,25 +322,31 @@
 				// Save the new configuration file //
 				/////////////////////////////////////
 				//
-				$main=new foundation_template('foundtion_application.ini');
+				$main=new foundation_template('foundation_application.ini', foundation_template::CORE);
 				//
-				$main->add_template('show_debug', $_POST['show_debug']);
-				$main->add_template('database_host', $_POST['database_host']);
-				$main->add_template('database_user', $_POST['database_user']);
-				$main->add_template('database_password', $_POST['database_password']);
-				$main->add_template('database_name', $_POST['database_name']);
-				$main->add_template('SMTP_host', $_POST['SMTP_host']);
-				$main->add_template('SMTP_user', $_POST['SMTP_user']);
-				$main->add_template('SMTP_password', $_POST['SMTP_password']);
-				$main->add_template('SMTP_from_address', $_POST['SMTP_from_address']);
-				$main->add_template('SMTP_from_name', $_POST['SMTP_from_name']);
-				$main->add_template('SMTP_debug', $_POST['SMTP_debug']);
+trace($_POST);
+				$main->add_token('SHOW_DEBUG', $_POST['show_debug']);
+				$main->add_token('DATABASE_HOST', $_POST['database_host']);
+				$main->add_token('DATABASE_USER', $_POST['database_user']);
+				$main->add_token('DATABASE_PASSWORD', $_POST['database_password']);
+				$main->add_token('DATABASE_NAME', $_POST['database_name']);
+				$main->add_token('SMTP_HOST', $_POST['SMTP_host']);
+				$main->add_token('SMTP_USER', $_POST['SMTP_user']);
+				$main->add_token('SMTP_PASSWORD', $_POST['SMTP_password']);
+				$main->add_token('SMTP_FROM_ADDRESS', $_POST['SMTP_from_address']);
+				$main->add_token('SMTP_FROM_NAME', $_POST['SMTP_from_name']);
+				$main->add_token('SMTP_DEBUG', $_POST['SMTP_debug']);
 				//
 				$content=$main->render();
 				//
-				$ini_file=get_ini_file();
+				file_save($this->ini->get_ini_path(), $content);
 				//
-				file_save($ini_file, $content);
+				// Reload the new ini
+				$application_name=application_name();
+				$ini=new foundation_ini($application_name);
+				$this->ini=$ini;
+				//
+				return $this->render('DISPLAY');
 			}
 			catch (Throwable $e)
 			{
