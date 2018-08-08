@@ -2,7 +2,7 @@
 	//
 	// database.php
 	//
-	class database
+	class foundation_database
 	{
 		private $connection;
 		private $db;
@@ -10,7 +10,7 @@
 		private $select;
 		private $SQL;
 		//
-		public function __construct($configuration)
+		public function __construct($host, $user, $password, $name)
 		{
 			try
 			{
@@ -19,40 +19,33 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 1);
+				confirm_args($arg_count, 4);
 				//
 				//
 				//////////////////////
 				// Check data types //
 				//////////////////////
 				//
-				confirm_array($configuration);
-				//
-				//
-				//////////////////
-				// Sanity Check //
-				//////////////////
-				//
-				confirm_array_element('database_host', $configuration);
-				confirm_array_element('database_user', $configuration);
-				confirm_array_element('database_password', $configuration);
-				confirm_array_element('database_name', $configuration);
+				confirm_string($host);
+				confirm_string($user);
+				confirm_string($password);
+				confirm_string($name);
 				//
 				//
 				/////////////////////////////
 				// Connect to the database //
 				/////////////////////////////
 				//
-				$this->connection=@mysqli_connect($configuration['database_host'], $configuration['database_user'], $configuration['database_password']);
+				$this->connection=@mysqli_connect($host, $user, $password);
 				if ($this->connection===FALSE)
 				{
-					throw new foundation_fault('Could not connect to database', mysqli_error());
+					throw new foundation_fault('Could not connect to database', @mysqli_connect_error().' err:'.@mysqli_connect_errno());
 				} // if ($this->connection===FALSE)
 				//
-				$this->db=@mysqli_select_db($this->connection, $configuration['database_name']);
+				$this->db=@mysqli_select_db($this->connection, $name);
 				if ($this->db===FALSE)
 				{
-					throw new foundation_fault('Could not select database', mysqli_error());
+					throw new foundation_fault('Could not select database', @mysqli_error());
 				} // if ($this->db===FALSE)
 				//
 				return;
@@ -215,5 +208,5 @@
 				throw new foundation_fault('Could not query database', '', $e);
 			} // try
 		} // query()
-	} // database
+	} // foundation_database
 ?>

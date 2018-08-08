@@ -38,6 +38,34 @@
 		} // __construct()
 		//
 		//
+		public function DATABASE_TEST()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				// Try to do something with the database
+				$tables=query_fetch_all_unique('show tables;');
+				//
+				$main=new foundation_template('foundation_database_test_success.tem', foundation_template::CORE);
+				//
+				$result=$main->render();
+				//
+				return $result;
+			}
+			catch (Thorwable $e)
+			{
+				throw new foundation_fault('Could not test database', '', $e);
+			} // try
+		} // DATABASE_TEST()
+		//
+		//
 		public function DISPLAY()
 		{
 			try
@@ -51,6 +79,7 @@
 				//
 				//
 				$main=new foundation_template('foundation_configuration.tem', foundation_template::CORE);
+				/*
 				$form_field=new foundation_template('foundation_configuration_setting.snip', foundation_template::CORE);
 				$form_radio_group=new foundation_template('foundation_configuration_setting_radio_group.snip', foundation_template::CORE);
 				$form_radio=new foundation_template('foundation_configuration_setting_radio.snip', foundation_template::CORE);
@@ -114,8 +143,83 @@
 						$main->append_snippet('FORM_FIELDS', $form_field);
 					} // if (is_bool($value))
 				} // foreach($this->ini->get_ini() as $setting=>$value)
+				*/
+				//
+				// Is show_debug true?
+				if ($this->ini->get_ini('show_debug')===TRUE)
+				{
+					// Yes, true
+					$show_debug_true='CHECKED';
+					$show_debug_false='';
+				}
+				else
+				{
+					// No, not true
+					$show_debug_true='';
+					$show_debug_false='CHECKED';
+				} // if ($this->ini->get_ini('show_debug')===TRUE)
+				//
+				// Are database settings present?
+				if (($this->ini->get_ini('database_host')!=='') && 
+						($this->ini->get_ini('database_user')!=='') && 
+						($this->ini->get_ini('database_password')!=='') && 
+						($this->ini->get_ini('database_name')!==''))
+				{
+					// Yes, present
+					$database_test=new foundation_template('foundation_configuration_database_test.snip', foundation_template::CORE);
+					$main->add_snippet('DATABASE_TEST', $database_test);
+				}
+				else
+				{
+					// No, something is missing
+					$main->add_token('DATABASE_TEST', '');
+				} // if [Database settings are present]
+				//
+				// Is smtp_debug true?
+				if ($this->ini->get_ini('SMTP_debug')===TRUE)
+				{
+					// Yes, true
+					$smtp_debug_true='CHECKED';
+					$smtp_debug_false='';
+				}
+				else
+				{
+					// No, not true
+					$smtp_debug_true='';
+					$smtp_debug_false='CHECKED';
+				} // if ($this->ini->get_ini('SMTP_debug')===TRUE)
+				//
+				// Are smtp settings present?
+				if (($this->ini->get_ini('SMTP_host')!=='') && 
+						($this->ini->get_ini('SMTP_user')!=='') && 
+						($this->ini->get_ini('SMTP_password')!=='') && 
+						($this->ini->get_ini('SMTP_from_address')!=='') && 
+						($this->ini->get_ini('SMTP_from_name')!==''))
+				{
+					// Yes, present
+					$smtp_test=new foundation_template('foundation_configuration_smtp_test.snip', foundation_template::CORE);
+					$main->add_snippet('SMTP_TEST', $smtp_test);
+				}
+				else
+				{
+					// No, something is missing
+					$main->add_token('SMTP_TEST', '');
+				} // if [Database settings are present]
 				//
 				$main->add_token('FOUNDATION_APPICATION_CLASS', application_name().'.php');
+				$main->add_token('SHOW_DEBUG_TRUE', $show_debug_true);
+				$main->add_token('SHOW_DEBUG_FALSE', $show_debug_false);
+				$main->add_token('DATABASE_HOST', $this->ini->get_ini('database_host'));
+				$main->add_token('DATABASE_USER', $this->ini->get_ini('database_user'));
+				$main->add_token('DATABASE_PASSWORD', $this->ini->get_ini('database_password'));
+				$main->add_token('DATABASE_NAME', $this->ini->get_ini('database_name'));
+				$main->add_token('SMTP_HOST', $this->ini->get_ini('SMTP_host'));
+				$main->add_token('SMTP_USER', $this->ini->get_ini('SMTP_user'));
+				$main->add_token('SMTP_PASSWORD', $this->ini->get_ini('SMTP_password'));
+				$main->add_token('SMTP_FROM_ADDRESS', $this->ini->get_ini('SMTP_from_address'));
+				$main->add_token('SMTP_FROM_NAME', $this->ini->get_ini('SMTP_from_name'));
+				$main->add_token('SMTP_DEBUG_TRUE', $smtp_debug_true);
+				$main->add_token('SMTP_DEBUG_FALSE', $smtp_debug_false);
 				//
 				return $main->render();
 			}
@@ -324,7 +428,7 @@
 				//
 				$main=new foundation_template('foundation_application.ini', foundation_template::CORE);
 				//
-trace($_POST);
+//trace($_POST);
 				$main->add_token('SHOW_DEBUG', $_POST['show_debug']);
 				$main->add_token('DATABASE_HOST', $_POST['database_host']);
 				$main->add_token('DATABASE_USER', $_POST['database_user']);
@@ -353,5 +457,30 @@ trace($_POST);
 				throw new foundation_fault('Could not save', '', $e);
 			} // try
 		} // SAVE()
+		//
+		//
+		public function SMTP_TEST()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				$main=new foundation_template('foundation_SMTP_test.tem', foundation_template::CORE);
+				//
+				$result=$main->render();
+				//
+				return $result;
+			}
+			catch (Thorwable $e)
+			{
+				throw new foundation_fault('Could not test STMP', '', $e);
+			} // try
+		} // SMTP_TEST()
 	} // foundation_install
 ?>

@@ -57,6 +57,12 @@
 					break; }
 					//
 					default: {
+if ($class_name==='fault')
+{
+print "<pre>";
+print_r (debug_backtrace());
+print "</pre>";
+}
 						$sub='';
 					break; }
 				} // switch ($class_name)
@@ -220,7 +226,7 @@
 			try
 			{
 				// Because this is called in the main error catch we're looser with
-				// parameter checking
+				// parameter checking and will accept more GIGO
 				//
 				/////////////////////////////
 				// Confirm parameter types //
@@ -382,7 +388,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new fault ('GET does not have required data', '', $e);
+				throw new foundation_fault('GET does not have required data', '', $e);
 			} // try
 		} // confirm_get_element()
 		//
@@ -468,14 +474,14 @@
 				// 
 				if (array_key_exists($needle, $haystack)!==TRUE)
 				{
-					throw new foundation_fault("array is missing [$needle]", origin());
+					throw new foundation_fault("array element missing [$needle]", origin());
 				} // if (array_key_exists($needle, $haystack)!==TRUE)
 				//
 				return TRUE;
 			}
 			catch (Throwable $e)
 			{
-				throw new fault ('Array does not have required element', '', $e);
+				throw new foundation_fault('Array does not have required element', '', $e);
 			} // try
 		} // confirm_array_element()
 		//
@@ -519,7 +525,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new fault ('POST does not have required data', '', $e);
+				throw new foundation_fault('POST does not have required data', '', $e);
 			} // try
 		} // confirm_post_element()
 		//
@@ -1046,11 +1052,7 @@
 				//
 				if (is_string($test_me)!==TRUE)
 				{
-					$backtrace=debug_backtrace();			
-					//
-					$origin=backtrace_origin($backtrace, 1);
-					//
-					throw new foundation_fault('Parameter is not string.  It is ['.gettype($test_me).']', $origin);
+					throw new foundation_fault('Parameter is not string.  It is ['.gettype($test_me).']', origin());
 				} // if (is_string($test_me)!==TRUE)
 				//
 				if (strpos($test_me, '..')!==FALSE)
@@ -1095,11 +1097,7 @@
 				//
 				if (is_string($test_me)!==TRUE)
 				{
-					$backtrace=debug_backtrace();			
-					//
-					$origin=backtrace_origin($backtrace, 1);
-					//
-					throw new foundation_fault('Parameter is not string.  It is ['.gettype($test_me).']', $origin);
+					throw new foundation_fault('Parameter is not string.  It is ['.gettype($test_me).']', origin());
 				} // if (is_string($test_me)!==TRUE)
 				//
 				return $test_me;
@@ -1453,7 +1451,7 @@
 				{
 					// No database connection
 					// Connect to the database
-					$database=new database(get_ini('database_host'), get_ini('database_user'), get_ini('database_password'), get_ini('database_name'));
+					$database=new foundation_database(get_ini('database_host'), get_ini('database_user'), get_ini('database_password'), get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1491,6 +1489,7 @@
 		function query_fetch_all_unique()
 		{
 			global $database;
+			global $ini;
 			//
 			try
 			{
@@ -1577,7 +1576,7 @@
 				{
 					// No database connection
 					// Connect to the database
-					$database=new database(get_ini('database_host'), get_ini('database_user'), get_ini('database_password'), get_ini('database_name'));
+					$database=new foundation_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1904,6 +1903,7 @@
 		//
 		$application_name=application_name();
 		$ini=new foundation_ini($application_name);
+//trace($ini);
 		$show_debug=$ini->get_ini('show_debug', foundation_ini::INI_OPTIONAL);
 $show_debug=TRUE;
 		$application_class=application_class($application_name);

@@ -31,9 +31,88 @@
 					can change these values at any time.  If you don't intend to use some of the features, simply leave those values
 					blank.
 					<br>
-					<form action='http://davenolansociety.com/#FOUNDATION_APPICATION_CLASS#' method='post'>
+					<form action='./#FOUNDATION_APPICATION_CLASS#' method='post'>
 						<input type='hidden' name='command' value='SAVE'>
-						#FORM_FIELDS#
+						
+						
+						<div class="form-group">
+							<fieldset class="form-group">
+								<legend>show_debug</legend>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="show_debug" value="TRUE" #SHOW_DEBUG_TRUE#>
+										True
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="show_debug" value="FALSE" #SHOW_DEBUG_FALSE#>
+										False
+									</label>
+								</div>
+							</fieldset>
+						</div>
+						
+						
+						<div class="form-group">
+							<label>database_host</label>
+							<input type="text" class="form-control" name='database_host' value='#DATABASE_HOST#'>
+						</div>
+						<div class="form-group">
+							<label>database_user</label>
+							<input type="text" class="form-control" name='database_user' value='#DATABASE_USER#'>
+						</div>
+						<div class="form-group">
+							<label>database_password</label>
+							<input type="text" class="form-control" name='database_password' value='#DATABASE_PASSWORD#'>
+						</div>
+						<div class="form-group">
+							<label>database_name</label>
+							<input type="text" class="form-control" name='database_name' value='#DATABASE_NAME#'>
+						</div>
+						
+						#DATABASE_TEST#
+						
+						<div class="form-group">
+							<label>SMTP_host</label>
+							<input type="text" class="form-control" name='SMTP_host' value='#SMTP_HOST#'>
+						</div>
+						<div class="form-group">
+							<label>SMTP_user</label>
+							<input type="text" class="form-control" name='SMTP_user' value='#SMTP_USER#'>
+						</div>
+						<div class="form-group">
+							<label>SMTP_password</label>
+							<input type="text" class="form-control" name='SMTP_password' value='#SMTP_PASSWORD#'>
+						</div>
+						<div class="form-group">
+							<label>SMTP_from_address</label>
+							<input type="text" class="form-control" name='SMTP_from_address' value='#SMTP_FROM_ADDRESS#'>
+						</div>
+						<div class="form-group">
+							<label>SMTP_from_name</label>
+							<input type="text" class="form-control" name='SMTP_from_name' value='#SMTP_FROM_NAME#'>
+						</div>
+						<div class="form-group">
+							<fieldset class="form-group">
+								<legend>SMTP_debug</legend>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="SMTP_debug" value="TRUE" #SMTP_DEBUG_TRUE#>
+										True
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="SMTP_debug" value="FALSE" #SMTP_DEBUG_FALSE#>
+										False
+									</label>
+								</div>
+							</fieldset>
+						</div>
+						
+						#SMTP_TEST#
+						
 						<div>
 							<input type='submit' name='submit' value='Save Configuration'>
 						</div>
