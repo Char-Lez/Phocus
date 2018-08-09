@@ -1165,6 +1165,9 @@ print "</pre>";
 		{
 			try
 			{
+				global $ini;
+				//
+				//
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -1200,22 +1203,15 @@ print "</pre>";
 				// SEND MAIL //
 				///////////////
 				//
-				$debug=get_ini('SMTP_debug');
-				$host=get_ini('SMTP_host');
-				$username=get_ini('SMTP_user');
-				$password=get_ini('SMTP_password');
-				$from_address=get_ini('SMTP_from_address');
-				$from_name=get_ini('SMTP_from_name');
+				$debug=$ini->get_ini('SMTP_debug');
+				$host=$ini->get_ini('SMTP_host');
+				$username=$ini->get_ini('SMTP_user');
+				$password=$ini->get_ini('SMTP_password');
+				$from_address=$ini->get_ini('SMTP_from_address');
+				$from_name=$ini->get_ini('SMTP_from_name');
 				//
 				$mail=new PHPMailer(true);
 				$mail->SMTPDebug=$debug;
-				//
-				//
-				//$mail->IsSMTP(); // set mailer to use SMTP
-				//$mail->Host="secure238.inmotionhosting.com";
-				//$mail->SMTPAuth=true; // turn on SMTP authentication
-				//$mail->Username="char-lez@davenolansociety.com"; // SMTP username
-				//$mail->Password="eagleeagle"; // SMTP password
 				//
 				$mail->IsSMTP();
 				$mail->Host=$host;
@@ -1236,7 +1232,7 @@ print "</pre>";
 				//
 				if ($send!==TRUE)
 				{
-					$send=$mail->ErrorInfo;
+					throw new foundation_fault('Could not send email', $mail->ErrorInfo);
 				}
 				//
 				return $send;
@@ -1368,6 +1364,7 @@ print "</pre>";
 		function query()
 		{
 			global $database;
+			global $ini;
 			//
 			try
 			{
@@ -1451,7 +1448,7 @@ print "</pre>";
 				{
 					// No database connection
 					// Connect to the database
-					$database=new foundation_database(get_ini('database_host'), get_ini('database_user'), get_ini('database_password'), get_ini('database_name'));
+					$database=new foundation_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1641,7 +1638,7 @@ print "</pre>";
 				// Read the file //
 				///////////////////
 				//
-				$data=@file_get_contents($path);
+				$data=file_get_contents($path);
 				// Did the file read?
 				if ($data===FALSE)
 				{

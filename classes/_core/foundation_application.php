@@ -471,7 +471,23 @@
 				confirm_args($arg_count, 0);
 				//
 				//
-				$main=new foundation_template('foundation_SMTP_test.tem', foundation_template::CORE);
+				$main=new foundation_template('foundation_smtp_test.tem', foundation_template::CORE);
+				$email=new foundation_template('foundation_smtp_test_email.snip', foundation_template::CORE);
+				$subject=new foundation_template('foundation_smtp_test_email_subject.bit', foundation_template::CORE);
+				$body=new foundation_template('foundation_smtp_test_email_body.snip', foundation_template::CORE);
+				//
+				$subject->add_token('DOMAIN', $_SERVER['HTTP_HOST']);
+				//
+				$body->add_token('DOMAIN', $_SERVER['HTTP_HOST']);
+				//
+				$email->add_snippet('SUBJECT', $subject);
+				$email->add_snippet('BODY', $body);
+				$email->add_token('SMTP_FROM_ADDRESS', $this->ini->get_ini('SMTP_from_address'));
+				$email->add_token('SMTP_FROM_NAME', $this->ini->get_ini('SMTP_from_name'));
+				//
+				$main->add_token('FOUNDATION_APPICATION_CLASS', application_name().'.php');
+				$main->add_snippet('EMAIL', $email);
+				$main->add_token('DOMAIN', $_SERVER['HTTP_HOST']);
 				//
 				$result=$main->render();
 				//
@@ -482,5 +498,41 @@
 				throw new foundation_fault('Could not test STMP', '', $e);
 			} // try
 		} // SMTP_TEST()
+		//
+		//
+		public function SMTP_SEND_EMAIL()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				confirm_post_element('to_test_address');
+				//
+				//
+				$main=new foundation_template('foundation_smtp_test_success.tem', foundation_template::CORE);
+				$subject=new foundation_template('foundation_smtp_test_email_subject.bit', foundation_template::CORE);
+				$body=new foundation_template('foundation_smtp_test_email_body.snip', foundation_template::CORE);
+				//
+				$subject->add_token('DOMAIN', $_SERVER['HTTP_HOST']);
+				//
+				$body->add_token('DOMAIN', $_SERVER['HTTP_HOST']);
+				//
+				my_mail($_POST['to_test_address'], $this->ini->get_ini('SMTP_from_name'), $subject->render(), $body->render());
+				//
+				$result=$main->render();
+				//
+				return $result;
+			}
+			catch (Thorwable $e)
+			{
+				throw new foundation_fault('Could not send STMP test', '', $e);
+			} // try
+		} // SMTP_SEND_EMAIL()
 	} // foundation_install
 ?>

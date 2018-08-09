@@ -8,8 +8,9 @@
 		const CORE='core';
 		//
 		private $content;
-		private $token_value;
+		private $file_path;
 		private $snippet;
+		private $token_value;
 		//
 		public function __construct($file_name, $core=foundation_template::APPLICATION)
 		{
@@ -63,7 +64,8 @@
 				// Load the template //
 				///////////////////////
 				//
-				$this->content=file_read('../templates/'.$sub.$file_name);
+				$this->file_path='../templates/'.$sub.$file_name;
+				$this->content=file_read($this->file_path);
 				//
 				//
 				///////////////////////////
@@ -323,6 +325,106 @@
 		} // clear_tokens()
 		//
 		//
+		public function get_content()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				//////////////////
+				// Clear tokens //
+				//////////////////
+				//
+				return $this->content;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get $content', '', $e);
+			} // try
+		} // get_content()
+		//
+		//
+		public function get_file_path()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				//////////////////
+				// Clear tokens //
+				//////////////////
+				//
+				return $this->file_path;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get $file_path', '', $e);
+			} // try
+		} // get_file_path()
+		//
+		//
+		public function get_snippet()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				//////////////////
+				// Clear tokens //
+				//////////////////
+				//
+				return $this->snippet;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get $snippet', '', $e);
+			} // try
+		} // get_snippet()
+		//
+		//
+		public function get_token_value()
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 0);
+				//
+				//
+				//////////////////
+				// Clear tokens //
+				//////////////////
+				//
+				return $this->token_value;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not get $token_value', '', $e);
+			} // try
+		} // get_token_value()
+		//
+		//
 		public function render()
 		{
 			try
@@ -339,8 +441,36 @@
 				// Render the template //
 				/////////////////////////
 				//
-				$rendition=$this->content;
+				$pre_rendition=$this->render_substitutions($this->content);
 				//
+				// First, escape ##'s
+				// Find a viable escape string
+				$escape=chr(31); // ASCII Group Separator
+				while (strpos($pre_rendition, $escape)!==FALSE)
+				{
+					$escape.=chr(31);
+				} // while (strpos($pre_rendition, $escape)!==FALSE)
+				//
+				// Use the escape string
+				$escaped_content=str_replace('##', $escape, $this->content);
+				//
+				$escaped_rendition=$this->render_substitutions($escaped_content);
+				//
+				$rendition=str_replace($escape, '##', $escaped_rendition);
+				//
+				return $rendition;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not render template', '', $e);
+			} // try
+		} // render()
+		//
+		//
+		private function render_substitutions($rendition)
+		{
+			try
+			{
 				foreach ($this->snippet as $token=>$HTML)
 				{
 					$rendition=str_replace("#{$token}#", $HTML, $rendition);
@@ -351,14 +481,12 @@
 					$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
 				} // foreach ($token_value as $token=>$value)
 				//
-				// All done
-				//
 				return $rendition;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not render template', '', $e);
+				throw new foundation_fault('Could not do substitutions', '', $e);
 			} // try
-		} // render()
+		} // render_substitutions()
 	} // template
 ?>
