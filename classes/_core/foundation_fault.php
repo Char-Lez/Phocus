@@ -216,7 +216,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not display as string', '', $e);
+				throw new foundation_fault('Could not display as string', origin(), $e);
 			} // try
 		} // as_string()
 		//

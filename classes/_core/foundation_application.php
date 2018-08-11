@@ -33,7 +33,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not make application', '', $e);
+				throw new foundation_fault('Could not make application', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -61,7 +61,7 @@
 			}
 			catch (Thorwable $e)
 			{
-				throw new foundation_fault('Could not test database', '', $e);
+				throw new foundation_fault('Could not test database', origin(), $e);
 			} // try
 		} // DATABASE_TEST()
 		//
@@ -225,7 +225,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not display', '', $e);
+				throw new foundation_fault('Could not display', origin(), $e);
 			} // try
 		} // DISPLAY()
 		//
@@ -237,7 +237,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not load modules', '', $e);
+				throw new foundation_fault('Could not load modules', origin(), $e);
 			} // try
 		} // load_modules
 		//
@@ -393,7 +393,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot render', '', $e);
+				throw new foundation_fault('Cannot render', origin(), $e);
 			} // try
 		} // render()
 		//
@@ -454,7 +454,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not save', '', $e);
+				throw new foundation_fault('Could not save', origin(), $e);
 			} // try
 		} // SAVE()
 		//
@@ -495,7 +495,7 @@
 			}
 			catch (Thorwable $e)
 			{
-				throw new foundation_fault('Could not test STMP', '', $e);
+				throw new foundation_fault('Could not test STMP', origin(), $e);
 			} // try
 		} // SMTP_TEST()
 		//
@@ -531,7 +531,7 @@
 			}
 			catch (Thorwable $e)
 			{
-				throw new foundation_fault('Could not send STMP test', '', $e);
+				throw new foundation_fault('Could not send STMP test', origin(), $e);
 			} // try
 		} // SMTP_SEND_EMAIL()
 	} // foundation_install

@@ -26,7 +26,7 @@
 					case 1: {
 						$file_name=func_get_arg(0);
 						$set=foundation_template::APPLICATION;
-						$sub='';
+						$sub=application_name().'/';
 					break; }
 					//
 					case 2: {
@@ -80,7 +80,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not make template', '', $e);
+				throw new foundation_fault('Could not make template', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -115,7 +115,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add snippet', '', $e);
+				throw new foundation_fault('Could not add snippet', origin(), $e);
 			} // try
 		} // add_snippet()
 		//
@@ -150,7 +150,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not append snippet', '', $e);
+				throw new foundation_fault('Could not append snippet', origin(), $e);
 			} // try
 		} // append_snippet()
 		//
@@ -195,7 +195,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add token', '', $e);
+				throw new foundation_fault('Could not add token', origin(), $e);
 			} // try
 		} // add_token()
 		//
@@ -238,7 +238,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add token', '', $e);
+				throw new foundation_fault('Could not add token', origin(), $e);
 			} // try
 		} // add_token_array()
 		//
@@ -266,7 +266,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not clear', '', $e);
+				throw new foundation_fault('Could not clear', origin(), $e);
 			} // try
 		} // clear ()
 		//
@@ -293,7 +293,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not clear snippets', '', $e);
+				throw new foundation_fault('Could not clear snippets', origin(), $e);
 			} // try
 		} // clear_snippets()
 		//
@@ -320,7 +320,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not clear tokens', '', $e);
+				throw new foundation_fault('Could not clear tokens', origin(), $e);
 			} // try
 		} // clear_tokens()
 		//
@@ -345,7 +345,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $content', '', $e);
+				throw new foundation_fault('Could not get $content', origin(), $e);
 			} // try
 		} // get_content()
 		//
@@ -370,7 +370,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $file_path', '', $e);
+				throw new foundation_fault('Could not get $file_path', origin(), $e);
 			} // try
 		} // get_file_path()
 		//
@@ -395,7 +395,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $snippet', '', $e);
+				throw new foundation_fault('Could not get $snippet', origin(), $e);
 			} // try
 		} // get_snippet()
 		//
@@ -420,7 +420,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $token_value', '', $e);
+				throw new foundation_fault('Could not get $token_value', origin(), $e);
 			} // try
 		} // get_token_value()
 		//
@@ -462,7 +462,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not render template', '', $e);
+				throw new foundation_fault('Could not render template', origin(), $e);
 			} // try
 		} // render()
 		//
@@ -485,7 +485,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not do substitutions', '', $e);
+				throw new foundation_fault('Could not do substitutions', origin(), $e);
 			} // try
 		} // render_substitutions()
 	} // template

@@ -52,7 +52,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not create database', '', $e);
+				throw new foundation_fault('Could not create database', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -80,7 +80,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not close database', '', $e);
+				throw new foundation_fault('Could not close database', origin(), $e);
 			} //try
 		} // close()
 		//
@@ -107,7 +107,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get row', '', $e);
+				throw new foundation_fault('Could not get row', origin(), $e);
 			} // try
 		} // fetch()
 		//
@@ -132,7 +132,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not count rows', '', $e);
+				throw new foundation_fault('Could not count rows', origin(), $e);
 			} // try
 		} // row_count()
 		//
@@ -205,7 +205,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not query database', '', $e);
+				throw new foundation_fault('Could not query database', origin(), $e);
 			} // try
 		} // query()
 	} // foundation_database

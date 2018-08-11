@@ -71,7 +71,14 @@ print "</pre>";
 				$include=@include($target_file);
 				if ($include===FALSE)
 				{
-					throw new Exception("Class file did not load: [$class_name]", __LINE__, NULL);
+					if ($class_name==='foundation_fault')
+					{
+						throw new Exception("Class file did not load: [$class_name]", __LINE__, NULL);
+					}
+					else
+					{
+						throw new foundation_fault("Class file did not load [$class_name]", origin());
+					} // if ($class_name==='foundation_fault')
 				} // if ($include===FALSE)
 				//
 				return;
@@ -131,7 +138,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot get application class', '', $e);
+				throw new foundation_fault('Cannot get application class', origin(), $e);
 			} // try
 		} // application_class()
 		//
@@ -169,7 +176,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get application name', '', $e);
+				throw new foundation_fault('Could not get application name', origin(), $e);
 			} // try
 		} // application_name()
 		//
@@ -210,7 +217,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get row', '', $e);
+				throw new foundation_fault('Could not get row', origin(), $e);
 			} // try
 		} // fetch()
 		//
@@ -267,13 +274,14 @@ print "</pre>";
 				</html>
 				<!--/generic_HTML()-->';
 				//
-				$result=str_replace('#DEBUG_INFO#', htmlspecialchars($debug_info), $result);
+				//$result=str_replace('#DEBUG_INFO#', htmlspecialchars($debug_info), $result);
+				$result=str_replace('#DEBUG_INFO#', $debug_info, $result);
 				//
 				return $result;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not show page', '', $e);
+				throw new foundation_fault('Could not show page', origin(), $e);
 			} // try
 		} // generic_HTML()
 		//
@@ -345,7 +353,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot get backtrace origin', '', $e);
+				throw new foundation_fault('Cannot get backtrace origin', origin(), $e);
 			} // try
 		} // backtrace_origin()
 		//
@@ -388,7 +396,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('GET does not have required data', '', $e);
+				throw new foundation_fault('GET does not have required data', origin(), $e);
 			} // try
 		} // confirm_get_element()
 		//
@@ -431,7 +439,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm arg count', '', $e);
+				throw new foundation_fault('Could not confirm arg count', origin(), $e);
 			} // try
 		} // confirm_args()
 		//
@@ -481,7 +489,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Array does not have required element', '', $e);
+				throw new foundation_fault('Array does not have required element', origin(), $e);
 			} // try
 		} // confirm_array_element()
 		//
@@ -525,7 +533,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('POST does not have required data', '', $e);
+				throw new foundation_fault('POST does not have required data', origin(), $e);
 			} // try
 		} // confirm_post_element()
 		//
@@ -560,7 +568,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm array', '', $e);
+				throw new foundation_fault('Could not confirm array', origin(), $e);
 			} // try
 		} // confirm_array()
 		//
@@ -595,7 +603,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm boolean', '', $e);
+				throw new foundation_fault('Could not confirm boolean', origin(), $e);
 			} // try
 		} // confirm_boolean()
 		//
@@ -630,7 +638,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm double', '', $e);
+				throw new foundation_fault('Could not confirm double', origin(), $e);
 			} // try
 		} // confirm_double()
 		//
@@ -665,7 +673,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm integer', '', $e);
+				throw new foundation_fault('Could not confirm integer', origin(), $e);
 			} // try
 		} // confirm_string()
 		//
@@ -852,7 +860,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm mixed', '', $e);
+				throw new foundation_fault('Could not confirm mixed', origin(), $e);
 			} // try
 		} // confirm_mixed()
 		//
@@ -887,7 +895,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm null', '', $e);
+				throw new foundation_fault('Could not confirm null', origin(), $e);
 			} // try
 		} // confirm_null()
 		//
@@ -955,7 +963,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm object', '', $e);
+				throw new foundation_fault('Could not confirm object', origin(), $e);
 			} // try
 		} // confirm_object()
 		//
@@ -1023,7 +1031,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm resource', '', $e);
+				throw new foundation_fault('Could not confirm resource', origin(), $e);
 			} // try
 		} // confirm_resource()
 		//
@@ -1069,7 +1077,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm path safe', '', $e);
+				throw new foundation_fault('Could not confirm path safe', origin(), $e);
 			} // try
 		} // confirm_path_safe()
 		//
@@ -1104,7 +1112,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm string', '', $e);
+				throw new foundation_fault('Could not confirm string', origin(), $e);
 			} // try
 		} // confirm_string()
 		//
@@ -1151,7 +1159,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot base64 decode', '', $e);
+				throw new foundation_fault('Cannot base64 decode', origin(), $e);
 			} // try
 		} // do_base64_decode()
 		//
@@ -1239,7 +1247,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Error sending email', '', $e);
+				throw new foundation_fault('Error sending email', origin(), $e);
 			} // try
 		} // my_mail()
 		//
@@ -1265,31 +1273,31 @@ print "</pre>";
 					if (is_array($backtrace)!==TRUE)
 					{
 						$backtrace_serialize=serialize(is_array($backtrace));
-						throw new foundation_fault('backtrace invalid', $backtrace_serialize);
+						throw new foundation_fault('backtrace invalid', var_to_HMTL($backtrace));
 					}
 					//
 					if (array_key_exists(0, $backtrace)===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault('backtrace incomplete', $backtrace_serialize);
+						throw new foundation_fault('backtrace incomplete', var_to_HMTL($backtrace));
 					}
 					//
 					if (is_array($backtrace[0])===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault('backtrace missing element 1', $backtrace_serialize);
+						throw new foundation_fault('backtrace missing element 1', var_to_HMTL($backtrace));
 					}
 					//
 					if (array_key_exists('file', $backtrace[0])===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault("backtrace missing 'file' element", $backtrace_serialize);
+						throw new foundation_fault("backtrace missing 'file' element", var_to_HMTL($backtrace));
 					}
 					//
 					if (array_key_exists('line', $backtrace[0])===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault("backtrace missing 'line' element", $backtrace_serialize);
+						throw new foundation_fault("backtrace missing 'line' element", var_to_HMTL($backtrace));
 					}
 					//
 					$origin=$backtrace[0]['file'].' @ '.$backtrace[0]['line'];
@@ -1307,31 +1315,31 @@ print "</pre>";
 				if (is_array($backtrace)!==TRUE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace invalid', $backtrace_serialize);
+					throw new foundation_fault('backtrace invalid', var_to_HMTL($backtrace));
 				}
 				//
 				if (array_key_exists(1, $backtrace)===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace incomplete', $backtrace_serialize);
+					throw new foundation_fault('backtrace incomplete', var_to_HMTL($backtrace));
 				}
 				//
 				if (is_array($backtrace[1])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace missing element 1', $backtrace_serialize);
+					throw new foundation_fault('backtrace missing element 1', var_to_HMTL($backtrace));
 				}
 				//
 				if (array_key_exists('file', $backtrace[1])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault("backtrace missing 'file' element", $backtrace_serialize);
+					throw new foundation_fault("backtrace missing 'file' element", var_to_HMTL($backtrace));
 				}
 				//
 				if (array_key_exists('line', $backtrace[1])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault("backtrace missing 'line' element", $backtrace_serialize);
+					throw new foundation_fault("backtrace missing 'line' element", var_to_HMTL($backtrace));
 				}
 				//
 				//
@@ -1341,7 +1349,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot get origin', '', $e);
+				throw new foundation_fault('Cannot get origin', origin(), $e);
 			} // try
 		} // origin()
 		//
@@ -1437,6 +1445,8 @@ print "</pre>";
 						} // if ($arg_count>1)
 					break; }
 				} // switch ($form)
+trace ("Form=$form");
+trace ($args);
 				//
 				//
 				///////////////////
@@ -1457,7 +1467,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not do query', '', $e);
+				throw new foundation_fault('Could not do query', origin(), $e);
 			} // try
 		} // query()
 		//
@@ -1515,6 +1525,7 @@ print "</pre>";
 					//
 					case 2: {
 						$unique=func_get_arg(1);
+						$args=array();
 						$form=2;
 					break; }
 					//
@@ -1603,7 +1614,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not do query', '', $e);
+				throw new foundation_fault('Could not do query', origin(), $e);
 			} // try
 		} // query_fetch_all_unique()
 		//
@@ -1650,7 +1661,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not read file', '', $e);
+				throw new foundation_fault('Could not read file', origin(), $e);
 			} // try
 		} // file_read()
 		//
@@ -1695,7 +1706,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not save file', '', $e);
+				throw new foundation_fault('Could not save file', origin(), $e);
 			} // try
 		} // file_save()
 		//
@@ -1736,7 +1747,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get row count', '', $e);
+				throw new foundation_fault('Could not get row count', origin(), $e);
 			} // try
 		} // row_count()
 		//
@@ -1766,12 +1777,12 @@ print "</pre>";
 				switch ($type)
 				{
 					case 'array': {
-						//$message_display="A:[".serialize($message)."]";
 						$message_display="Array<br>\n";
-						foreach($message as $k=>$v)
-						{
-							$message_display.="$k=>$v<br>\n";
-						} // foreach($message as $k=>$v)
+						$message_display.=var_to_HMTL($message);
+						//foreach($message as $k=>$v)
+						//{
+						//	$message_display.="$k=>$v<br>\n";
+						//} // foreach($message as $k=>$v)
 					break; }
 					//
 					case 'boolean': {
@@ -1885,9 +1896,118 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot trace', '', $e);
+				throw new foundation_fault('Cannot trace', origin(), $e);
 			} // try
 		} // trace()
+		//
+		//
+		function var_to_HMTL($var)
+		{
+			try
+			{
+				$output='<table border="1" cellspacing="0" cellpadding="2">';
+				$output.='<tr>';
+				switch(gettype($var))
+				{
+					case 'boolean': {
+						$output.='<td valign="top">boolean</td>';
+						if ($var===TRUE)
+						{
+							$output.='<td>TRUE</td>';
+						}
+						else
+						{
+							$output.='<td>FALSE</td>';
+						}
+						$output.='</tr>';
+					break; }
+					//
+					case 'integer': {
+						$output.="<td valign=\"top\" align=\"left\">integer</td><td>$var</td></tr>";
+					break; }
+					//
+					case 'double': {
+						$output.="<td valign=\"top\" align=\"left\">double</td><td>$var</td></tr>";
+					break; }
+					//
+					case 'string': {
+						$output.="<td valign=\"top\" align=\"left\">string [".strlen($var)."]</td><td>$var</td></tr>";
+					break; }
+					//
+					case 'array': {
+						$output.="<td valign=\"top\" align=\"left\">array [".count($var)."]</td><td></td></tr>";
+						foreach ($var as $k=>$v)
+						{
+							$output.="<tr><td valign=\"top\" align=\"right\">$k<td>".var_to_HMTL($v)."</td></tr>";
+						}
+					break; }
+					//
+					case 'object': {
+						$properties=get_object_vars($var);
+						$output.="<td valign=\"top\" align=\"left\">object [".count($properties)."]</td><td></td></tr>";
+						foreach ($var as $k=>$v)
+						{
+							$output.="<tr><td valign=\"top\" align=\"right\">$k<td>".var_to_HMTL($v)."</td></tr>";
+						}
+					break; }
+					//
+					case 'resource': {
+						try
+						{
+							$output.="<td valign=\"top\" align=\"left\">recource</td><td>".serialize($var)."</td></tr>";
+						}
+						catch (Throwable $e)
+						{
+							$output.="<td valign=\"top\" align=\"left\">recource</td><td>[CANNOT BE SERIALIZED]</td></tr>";
+						} // try
+					break; }
+					//
+					case 'resource (closed)': {
+						try
+						{
+							$output.="<td valign=\"top\" align=\"left\">resource (closed)</td><td>".serialize($var)."</td></tr>";
+						}
+						catch (Throwable $e)
+						{
+							$output.="<td valign=\"top\" align=\"left\">resource (closed)</td><td>[CANNOT BE SERIALIZED]</td></tr>";
+						} // try
+					break; }
+					//
+					case 'NULL': {
+						$output.="<td valign=\"top\" align=\"left\">NULL</td><td></td></tr>";
+					break; }
+					//
+					case 'unknown type': {
+						try
+						{
+							$output.="<td valign=\"top\" align=\"left\">unknown type</td><td>".serialize($var)."</td></tr>";
+						}
+						catch (Throwable $e)
+						{
+							$output.="<td valign=\"top\" align=\"left\">unknown type</td><td>[CANNOT BE SERIALIZED]</td></tr>";
+						} // try
+					break; }
+					//
+					default: {
+						try
+						{
+							$output.="<td valign=\"top\" align=\"left\">?</td><td>".serialize($var)."</td></tr>";
+						}
+						catch (Throwable $e)
+						{
+							$output.="<td valign=\"top\" align=\"left\">?</td><td>[CANNOT BE SERIALIZED]</td></tr>";
+						} // try
+					break; }
+				} // switch(gettype($var))
+				$output.='</table>';
+				//
+				return $output;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not output variable to HTML', origin());
+			} // try
+		} // var_to_HTML()
 	}
 	//
 	//

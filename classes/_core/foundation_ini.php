@@ -41,7 +41,7 @@
 			}
 			catch(Throwable $e)
 			{
-				throw new foundation_fault('Cannot make ini', '', $e);
+				throw new foundation_fault('Cannot make ini', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -95,7 +95,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not load ini', '', $e);
+				throw new foundation_fault('Could not load ini', origin(), $e);
 			} // try
 		} // ini_load()
 		//
@@ -110,7 +110,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot make application ini path', '', $e);
+				throw new foundation_fault('Cannot make application ini path', origin(), $e);
 			} // try
 		} //  ini_path()
 		//
@@ -166,7 +166,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot return ini', '', $e);
+				throw new foundation_fault('Cannot return ini', origin(), $e);
 			} // try
 		} // get_ini()
 		//
@@ -190,7 +190,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get ini path', '', $e);
+				throw new foundation_fault('Could not get ini path', origin(), $e);
 			} // try
 		} // get_ini_path()
 	} // foundation_ini
