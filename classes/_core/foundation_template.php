@@ -441,6 +441,7 @@
 				// Render the template //
 				/////////////////////////
 				//
+				/*
 				$pre_rendition=$this->render_substitutions($this->content);
 				//
 				// First, escape ##'s
@@ -457,8 +458,9 @@
 				$escaped_rendition=$this->render_substitutions($escaped_content);
 				//
 				$rendition=str_replace($escape, '##', $escaped_rendition);
+				*/
 				//
-				return $rendition;
+				return $this->render_substitutions($this->content);;
 			}
 			catch (Throwable $e)
 			{
