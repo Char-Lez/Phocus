@@ -1445,8 +1445,6 @@ print "</pre>";
 						} // if ($arg_count>1)
 					break; }
 				} // switch ($form)
-trace ("Form=$form");
-trace ($args);
 				//
 				//
 				///////////////////
