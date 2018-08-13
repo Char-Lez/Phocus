@@ -30,6 +30,8 @@
 				$this->ini=$ini;
 				//
 				$this->load_modules();
+				//
+				$this->initialize();
 			}
 			catch (Throwable $e)
 			{
@@ -240,6 +242,18 @@
 				throw new foundation_fault('Could not load modules', origin(), $e);
 			} // try
 		} // load_modules
+		//
+		//
+		private function initialize()
+		{
+			try
+			{
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not load modules', origin(), $e);
+			} // try
+		} // initialize
 		//
 		//
 		/**
