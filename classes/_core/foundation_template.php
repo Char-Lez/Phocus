@@ -265,25 +265,34 @@
 				confirm_array($token_list);
 				confirm_string($value);
 				confirm_string($prefix);
+				confirm_string($default);
 				//
 				//
 				////////////////////
 				// Add the tokens //
 				////////////////////
 				//
+				$used=FALSE;
 				$token_prefix=strtoupper($prefix).'_';
 				foreach ($token_list as $token=>$v)
 				{
-					$token=$token_prefix.strtoupper($token);
+					$token=$token_prefix.strtoupper($v);
 					if ($value===$v)
 					{
 						$this->token_value[$token]='CHECKED';
+						$used=TRUE;
 					}
 					else
 					{
 						$this->token_value[$token]='';
 					} // if ($value===$v)
 				} // foreach ($token_list as $token=>$v)
+				//
+				if ($used===FALSE)
+				{
+					$token=$token_prefix.strtoupper($defult);
+					$this->token_value[$token]='SELECTED';
+				} // if ($used===FALSE)
 				//
 				return;
 			}
@@ -294,7 +303,7 @@
 		} // add_token_radio()
 		//
 		//
-		public function add_token_select($token_list, $value, $prefix)
+		public function add_token_select($token_list, $value, $prefix, $default)
 		{
 			try
 			{
@@ -313,25 +322,34 @@
 				confirm_array($token_list);
 				confirm_string($value);
 				confirm_string($prefix);
+				confirm_string($default);
 				//
 				//
 				////////////////////
 				// Add the tokens //
 				////////////////////
 				//
+				$used=FALSE;
 				$token_prefix=strtoupper($prefix).'_';
 				foreach ($token_list as $token=>$v)
 				{
-					$token=$token_prefix.strtoupper($token);
+					$token=$token_prefix.strtoupper($v);
 					if ($value===$v)
 					{
 						$this->token_value[$token]='SELECTED';
+						$used=TRUE;
 					}
 					else
 					{
 						$this->token_value[$token]='';
 					} // if ($value===$v)
 				} // foreach ($token_list as $token=>$v)
+				//
+				if ($used===FALSE)
+				{
+					$token=$token_prefix.strtoupper($defult);
+					$this->token_value[$token]='SELECTED';
+				} // if ($used===FALSE)
 				//
 				return;
 			}
