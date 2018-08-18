@@ -246,7 +246,7 @@
 		} // add_token_array()
 		//
 		//
-		public function add_token_radio($token_list, $value, $prefix)
+		public function add_token_radio($token_list, $value, $prefix, $default)
 		{
 			try
 			{
