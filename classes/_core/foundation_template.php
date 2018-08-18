@@ -10,12 +10,15 @@
 		private $content;
 		private $file_path;
 		private $snippet;
+		private $strict;
 		private $token_value;
 		//
 		public function __construct($file_name, $core=foundation_template::APPLICATION)
 		{
 			try
 			{
+				global $ini;
+				//
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -74,7 +77,7 @@
 				//
 				$this->token_value=array();
 				$this->snippet=array();
-				//
+				$this->strict=$ini->get_ini('strict');
 				//
 				return;
 			}
@@ -537,26 +540,84 @@
 				// Render the template //
 				/////////////////////////
 				//
-				/*
-				$pre_rendition=$this->render_substitutions($this->content);
+				$rendition=$this->content;
 				//
-				// First, escape ##'s
-				// Find a viable escape string
-				$escape=chr(31); // ASCII Group Separator
-				while (strpos($pre_rendition, $escape)!==FALSE)
+				if ($this->strict===TRUE)
 				{
-					$escape.=chr(31);
-				} // while (strpos($pre_rendition, $escape)!==FALSE)
+					// strict mode
+					//
+					$unused=array();
+					foreach ($this->snippet as $token=>$HTML)
+					{
+						$rendition2=str_replace("#{$token}#", $HTML, $rendition);
+						//
+						if ($rendition2==$rendition)
+						{
+							$unused[]='SNIPPET:'.$token;
+						} // if ($rendition2==$rendition)
+						//
+						$rendition=$rendition2;
+					} // foreach ($token_value as $token=>$value)
+					//
+					foreach ($this->token_value as $token=>$value)
+					{
+						$rendition2=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
+						//
+						if ($rendition2==$rendition)
+						{
+							$unused[]='TOKEN:'.$token;
+						} // if ($rendition2==$rendition)
+						//
+						$rendition=$rendition2;
+					} // foreach ($token_value as $token=>$value)
+					//
+					// Any unused tokens?
+					if (count($unused)!==0)
+					{
+						// Yes, unused tokens
+						$dedupe=array_unique($unused);
+						$display=implode(', ', $dedupe);
+						throw new foundation_fault('Unused token found', $display);
+					} // if (count($unused)!==0)
+					//
+					$matches=array();
+					$match_count=preg_match_all("/#(.*?)#/i", $rendition, $matches);
+					//
+					if ($match_count===FALSE)
+					{
+						throw new foundation_fault('Token match failed', '');
+					} // if ($match_count===FALSE)
+					//
+					if ($match_count!==0)
+					{
+						$dedupe=array_unique($matches[0]);
+						$display=implode(', ', $dedupe);
+						if ($match_count===1)
+						{
+							throw new foundation_fault('Unresolved token found', $display);
+						}
+						else
+						{
+							throw new foundation_fault('Unresolved tokens found', $display);
+						} // if ($match_count===1)
+					} // if ($match_count!==0)
+				}
+				else
+				{
+					// Permissive mode
+					//
+					foreach ($this->snippet as $token=>$HTML)
+					{
+						$rendition=str_replace("#{$token}#", $HTML, $rendition);
+					} // foreach ($token_value as $token=>$value)
+					//
+					foreach ($this->token_value as $token=>$value)
+					{
+						$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
+					} // foreach ($token_value as $token=>$value)
+				} // if ($this->strict===TRUE)
 				//
-				// Use the escape string
-				$escaped_content=str_replace('##', $escape, $this->content);
-				//
-				$escaped_rendition=$this->render_substitutions($escaped_content);
-				//
-				$rendition=str_replace($escape, '##', $escaped_rendition);
-				*/
-				//
-				return $this->render_substitutions($this->content);;
+				return $rendition;
 			}
 			catch (Throwable $e)
 			{
@@ -565,6 +626,7 @@
 		} // render()
 		//
 		//
+		/*
 		private function render_substitutions($rendition)
 		{
 			try
@@ -586,5 +648,6 @@
 				throw new foundation_fault('Could not do substitutions', origin(), $e);
 			} // try
 		} // render_substitutions()
+		*/
 	} // template
 ?>

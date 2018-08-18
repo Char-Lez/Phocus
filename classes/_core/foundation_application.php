@@ -210,6 +210,14 @@
 		/**
 		* <h1>Render</h1>
 		* Generates rendered output.  Rendering should handle all substitutions
+		*
+		* FORM 1:
+		* 	No arguments, will look for command in post, get or cookie, in that order
+		*   Or, if finding no command, will use 'DISPLAY' as default
+		*
+		* FORM 2:
+		*		command [string], an explicitly declared command
+		*
 		*/
 		function render()
 		{
@@ -224,42 +232,11 @@
 				{
 					case 0: {
 						$command='';
-						$strict=FALSE;
 					break; }
 					//
 					case 1: {
-						$arg=func_get_arg(0);
-						if (is_string($arg)===TRUE)
-						{
-							$command=$arg;
-							$strict=FALSE;
-						}
-						else
-						{
-							if (is_int($arg)===TRUE)
-							{
-								if ($arg===foundation_application::STRICT)
-								{
-									$command='';
-									$strict=TRUE;
-								}
-								else
-								{
-									throw new foundation_fault('Invalid option', $arg);
-								} // if ($arg===foundation_appliction::STRICT)
-							} // if (is_int($arg)===TRUE)
-						} // if (is_string($arg)===TRUE)
-					break; }
-					//
-					case 2: {
 						$command=func_get_arg(0);
 						confirm_string($command);
-						$strict=func_get_arg(1);
-						confirm_int($strict);
-						if ($strict!==foundation_application::STRICT)
-						{
-							throw new foundation_fault('Invalid option', $strict);
-						} // if ($strict!==foundation_application::STRICT)
 					break; }
 					//
 					default: {
@@ -326,33 +303,6 @@
 					// Yes, command exists
 					$response=$this->$command();
 				} // if (method_exists($application, $command)!==TRUE)
-				//
-				// Are we running in strict mode?
-				if ($strict===TRUE)
-				{
-					// Yes, strict mode
-					$matches=array();
-					$match_count=preg_match_all("/#(.*?)#/i", $response, $matches);
-					//
-					if ($match_count===FALSE)
-					{
-						throw new foundation_fault('Token match failed', '');
-					} // if ($match_count===FALSE)
-					//
-					if ($match_count!==0)
-					{
-						$display=implode(', ', $matches[0]);
-						if ($match_count===1)
-						{
-							throw new foundation_fault('Unresolved token found', $display);
-						}
-						else
-						{
-							throw new foundation_fault('Unresolved tokens found', $display);
-						} // if ($match_count===1)
-					} // if ($match_count!==0)
-				} // if ($strict===TRUE)
-				//
 				//
 				return $response;
 			}
