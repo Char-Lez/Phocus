@@ -244,7 +244,7 @@
 		} // load_modules
 		//
 		//
-		private function initialize()
+		protected function initialize()
 		{
 			try
 			{
