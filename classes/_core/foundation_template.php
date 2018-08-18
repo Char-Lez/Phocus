@@ -243,6 +243,102 @@
 		} // add_token_array()
 		//
 		//
+		public function add_token_radio($token_list, $value, $prefix)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 3);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_array($token_list);
+				confirm_string($value);
+				confirm_string($prefix);
+				//
+				//
+				////////////////////
+				// Add the tokens //
+				////////////////////
+				//
+				$token_prefix=strtoupper($prefix).'_';
+				foreach ($token_list as $token=>$v)
+				{
+					$token=$token_prefix.strtoupper($token);
+					if ($value===$v)
+					{
+						$this->token_value[$token]='CHECKED';
+					}
+					else
+					{
+						$this->token_value[$token]='';
+					} // if ($value===$v)
+				} // foreach ($token_list as $token=>$v)
+				//
+				return;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not add tokens', origin(), $e);
+			} // try
+		} // add_token_radio()
+		//
+		//
+		public function add_token_select($token_list, $value, $prefix)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 3);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_array($token_list);
+				confirm_string($value);
+				confirm_string($prefix);
+				//
+				//
+				////////////////////
+				// Add the tokens //
+				////////////////////
+				//
+				$token_prefix=strtoupper($prefix).'_';
+				foreach ($token_list as $token=>$v)
+				{
+					$token=$token_prefix.strtoupper($token);
+					if ($value===$v)
+					{
+						$this->token_value[$token]='SELECTED';
+					}
+					else
+					{
+						$this->token_value[$token]='';
+					} // if ($value===$v)
+				} // foreach ($token_list as $token=>$v)
+				//
+				return;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not add tokens', origin(), $e);
+			} // try
+		} // add_token_select()
+		//
+		//
 		public function clear()
 		{
 			try
