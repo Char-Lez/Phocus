@@ -81,71 +81,6 @@
 				//
 				//
 				$main=new foundation_template('foundation_configuration.tem', foundation_template::CORE);
-				/*
-				$form_field=new foundation_template('foundation_configuration_setting.snip', foundation_template::CORE);
-				$form_radio_group=new foundation_template('foundation_configuration_setting_radio_group.snip', foundation_template::CORE);
-				$form_radio=new foundation_template('foundation_configuration_setting_radio.snip', foundation_template::CORE);
-				//
-				foreach($this->ini->get_ini() as $setting=>$value)
-				{
-					if (is_bool($value)===TRUE)
-					{
-						// It's boolean
-						if ($value===TRUE)
-						{
-							$value='TRUE';
-						}
-						else
-						{
-							$value='FALSE';
-						} // if ($value===TRUE)
-						//
-						$form_radio_group->add_token('SETTING', $setting);
-						//
-						// TRUE
-						$form_radio->add_token('NAME', $setting);
-						$form_radio->add_token('VALUE', 'TRUE');
-						$form_radio->add_token('DISPLAY', 'True');
-						if ($value===TRUE)
-						{
-							$form_radio->add_token('STATUS', 'CHECKED');
-						}
-						else
-						{
-							$form_radio->add_token('STATUS', '');
-						} // if ($value===TRUE)
-						//
-						$form_radio_group->append_snippet('RADIO_BUTTONS', $form_radio);
-						//
-						// FALSE
-						$form_radio->add_token('VALUE', 'FALSE');
-						$form_radio->add_token('DISPLAY', 'False');
-						if ($value===FALSE)
-						{
-							$form_radio->add_token('STATUS', '');
-						}
-						else
-						{
-							$form_radio->add_token('STATUS', 'CHECKED');
-						} // if ($value===FALSE)
-						//
-						$form_radio_group->append_snippet('RADIO_BUTTONS', $form_radio);
-						//
-						$main->append_snippet('FORM_FIELDS', $form_radio_group);
-						//
-						$form_radio_group->clear();
-					}
-					else
-					{
-						// Not boolean
-						//
-						$form_field->add_token('SETTING', $setting);
-						$form_field->add_token('VALUE', $value);
-						//
-						$main->append_snippet('FORM_FIELDS', $form_field);
-					} // if (is_bool($value))
-				} // foreach($this->ini->get_ini() as $setting=>$value)
-				*/
 				//
 				// Is show_debug true?
 				if ($this->ini->get_ini('show_debug')===TRUE)
@@ -160,6 +95,20 @@
 					$show_debug_true='';
 					$show_debug_false='CHECKED';
 				} // if ($this->ini->get_ini('show_debug')===TRUE)
+				//
+				// Is strict true?
+				if ($this->ini->get_ini('strict')===TRUE)
+				{
+					// Yes, true
+					$strict_true='CHECKED';
+					$strict_false='';
+				}
+				else
+				{
+					// No, not true
+					$strict_true='';
+					$strict_false='CHECKED';
+				} // if ($this->ini->get_ini('strict')===TRUE)
 				//
 				// Are database settings present?
 				if (($this->ini->get_ini('database_host')!=='') && 
@@ -211,6 +160,8 @@
 				$main->add_token('FOUNDATION_APPICATION_CLASS', application_name().'.php');
 				$main->add_token('SHOW_DEBUG_TRUE', $show_debug_true);
 				$main->add_token('SHOW_DEBUG_FALSE', $show_debug_false);
+				$main->add_token('STRICT_TRUE', $strict_true);
+				$main->add_token('STRICT_FALSE', $strict_false);
 				$main->add_token('DATABASE_HOST', $this->ini->get_ini('database_host'));
 				$main->add_token('DATABASE_USER', $this->ini->get_ini('database_user'));
 				$main->add_token('DATABASE_PASSWORD', $this->ini->get_ini('database_password'));
@@ -424,6 +375,7 @@
 				confirm_args($arg_count, 0);
 				//
 				confirm_post_element('show_debug');
+				confirm_post_element('strict');
 				confirm_post_element('database_host');
 				confirm_post_element('database_user');
 				confirm_post_element('database_password');
@@ -442,8 +394,8 @@
 				//
 				$main=new foundation_template('foundation_application.ini', foundation_template::CORE);
 				//
-//trace($_POST);
 				$main->add_token('SHOW_DEBUG', $_POST['show_debug']);
+				$main->add_token('STRICT', $_POST['strict']);
 				$main->add_token('DATABASE_HOST', $_POST['database_host']);
 				$main->add_token('DATABASE_USER', $_POST['database_user']);
 				$main->add_token('DATABASE_PASSWORD', $_POST['database_password']);
