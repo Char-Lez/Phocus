@@ -255,7 +255,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 3);
+				confirm_args($arg_count, 4);
 				//
 				//
 				//////////////////////
@@ -312,7 +312,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 3);
+				confirm_args($arg_count, 4);
 				//
 				//
 				//////////////////////
