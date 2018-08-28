@@ -217,7 +217,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get row', origin(), $e);
+				throw new foundation_fault('Could not fetch row', origin(), $e);
 			} // try
 		} // fetch()
 		//
@@ -1618,6 +1618,139 @@ print "</pre>";
 		//
 		//
 		/**
+		* <h1>Will return exactly one row, or fail</h1>
+		*
+		* FORM 1:
+		*  $SQL [string]
+		*
+		* FORM 2:
+		*  $SQL [string]
+		*  {List of discrete parameters}
+		*
+		* FORM 3:
+		*  $SQL [string]
+		*  $data [array]
+		*/
+		function query_one()
+		{
+			global $database;
+			global $ini;
+			//
+			//
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				if ($arg_count===0)
+				{
+					throw new foundation_fault("Invalid args [$arg_count]", origin());
+				} // if ($arg_count===0)
+				//
+				$SQL=func_get_arg(0);
+				if (is_string($SQL)===FALSE)
+				{
+					throw new foundation_fault('SQL is not string. It is ['.gettype($SQL).']', origin());
+				} // if (is_string($SQL)===FALSE)
+				//
+				$form=3;
+				//
+				if ($arg_count===1)
+				{
+					$form=1;
+				} // if ($arg_count===1)
+				//
+				if ($arg_count>1)
+				{
+					$args=func_get_arg(1);
+					if (is_array($args)===TRUE)
+					{
+						if ($arg_count!==2)
+						{
+							throw new foundation_fault("Invalid args for FORM 2 [$arg_count]", origin());
+						} // if ($arg_count!==2)
+						//
+						$form=2;
+					} // if (is_array($param)===TRUE)
+				} // if ($arg_count>1)
+				//
+				switch ($form)
+				{
+					case 1: {
+						$args=array();
+					break; }
+					//
+					case 2: {
+						// args is already defined
+						foreach ($args as $key=>$arg)
+						{
+							if ((is_string($arg)===FALSE) && (is_numeric($arg)===FALSE))
+							{
+								throw new foundation_fault("Invalid \$args[$key]=>".gettype($arg), origin());
+							} // if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
+						} // foreach ($args as $key=>$arg)
+					break; }
+					//
+					case 3: {
+						$args=array();
+						if ($arg_count>1)
+						{
+							for ($a=1; $a<$arg_count; $a++)
+							{
+								$args[$a]=func_get_arg($a);
+								if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
+								{
+									throw new foundation_fault("Invalid arg type [$a]=>".gettype($args[$a]), origin());
+								} // if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
+							} // for ($a=1; $a<$arg_count; $a++)
+						} // if ($arg_count>1)
+					break; }
+				} // switch ($form)
+				//
+				//
+				///////////////////
+				// Execute query //
+				///////////////////
+				//
+				// Is there a database connection?
+				if ($database===FALSE)
+				{
+					// No database connection
+					// Connect to the database
+					$database=new foundation_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
+				} // if ($database===FALSE)
+				//
+				$database->query($SQL, $args);
+				$data=array();
+				$row_count=row_count();
+				//
+				switch ($row_count)
+				{
+					case 0: {
+						$result=FALSE;
+					break; }
+					//
+					case 1: {
+						$result=fetch();
+					break; }
+					//
+					default: {
+						throw new foundation_fault("Invalid number of rows found: [$row_count]", origin());
+					break; }
+				} // switch ($row_count)
+				//
+				return $result;
+			}
+			catch (Throwable $e)
+			{
+				throw new foundation_fault('Could not query_one', origin(), $e);
+			} // try
+		} // query_one()
+		//
+		//
+		/**
 		* <h1>file read</h1>
 		* Reads a file and handles errors
 		*
@@ -2023,7 +2156,7 @@ print "</pre>";
 $show_debug=TRUE;
 		$application_class=application_class($application_name);
 		$application=new $application_class($ini);
-		$response=$application->render(foundation_application::STRICT);
+		$response=$application->render();
 	}
 	catch (Throwable $e)
 	{
