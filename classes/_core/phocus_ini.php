@@ -1,8 +1,8 @@
 <?php
 	//
-	// foundation_ini.php
+	// phocus_ini.php
 	//
-	class foundation_ini
+	class phocus_ini
 	{
 		const INI_OPTIONAL='OPTIONAL';
 		//
@@ -22,12 +22,12 @@
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				if (is_string($application_name)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not string.  It is ['.gettype($application_name).']', origin());
+					throw new phocus_fault('Parameter is not string.  It is ['.gettype($application_name).']', origin());
 				} // if (is_string($application_name)!==TRUE)
 				//
 				//
@@ -41,7 +41,7 @@
 			}
 			catch(Throwable $e)
 			{
-				throw new foundation_fault('Cannot make ini', origin(), $e);
+				throw new phocus_fault('Cannot make ini', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -56,7 +56,7 @@
 					// No, ini does not exist
 					//
 					// Let's try to get the installation sample ini
-					$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
+					$template=new phocus_template('phocus_application.ini', phocus_template::CORE);
 					//
 					$template->add_token('DATABASE_HOST', '');
 					$template->add_token('DATABASE_USER', '');
@@ -76,7 +76,7 @@
 				if (file_exists($application_ini_path)!==TRUE)
 				{
 					// No, ini file is missing
-					throw new foundation_fault('Missing ini file', $application_ini_path);
+					throw new phocus_fault('Missing ini file', $application_ini_path);
 				}
 				else
 				{
@@ -87,7 +87,7 @@
 					if ($ini===FALSE)
 					{
 						// No, did not parse
-						throw new foundation_fault('Could not parse ini', $application_ini_path);
+						throw new phocus_fault('Could not parse ini', $application_ini_path);
 					} // if ($ini===FALSE)
 				} // if (file_exists($application_ini_path)!==TRUE)
 				//
@@ -95,7 +95,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not load ini', origin(), $e);
+				throw new phocus_fault('Could not load ini', origin(), $e);
 			} // try
 		} // ini_load()
 		//
@@ -110,7 +110,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot make application ini path', origin(), $e);
+				throw new phocus_fault('Cannot make application ini path', origin(), $e);
 			} // try
 		} //  ini_path()
 		//
@@ -142,10 +142,10 @@
 						confirm_string($needle);
 						confirm_string($optional);
 						//
-						if ($optional!==foundation_ini::INI_OPTIONAL)
+						if ($optional!==phocus_ini::INI_OPTIONAL)
 						{
-							throw new foundation_fault('Unknown option', $optional);
-						} // if ($optional!==foundation_ini::INI_OPTIONAL)
+							throw new phocus_fault('Unknown option', $optional);
+						} // if ($optional!==phocus_ini::INI_OPTIONAL)
 						//
 						if (array_key_exists($needle, $this->ini)!==TRUE)
 						{
@@ -158,7 +158,7 @@
 					break; }
 					//
 					default: {
-						throw new foundation_fault('Invalid argument count', $arg_count);
+						throw new phocus_fault('Invalid argument count', $arg_count);
 					break; }
 				} // switch ($arg_count)
 				//
@@ -166,7 +166,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot return ini', origin(), $e);
+				throw new phocus_fault('Cannot return ini', origin(), $e);
 			} // try
 		} // get_ini()
 		//
@@ -182,7 +182,7 @@
 				$arg_count=func_num_args();
 				if ($arg_count!==0)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==0)
 				//
 				//
@@ -190,8 +190,8 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get ini path', origin(), $e);
+				throw new phocus_fault('Could not get ini path', origin(), $e);
 			} // try
 		} // get_ini_path()
-	} // foundation_ini
+	} // phocus_ini
 ?>

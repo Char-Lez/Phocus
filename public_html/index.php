@@ -42,12 +42,12 @@
 				//
 				switch ($class_name)
 				{
-					case 'foundation_application': 
-					case 'foundation_database': 
-					case 'foundation_ini': 
-					case 'foundation_fault': 
-					case 'foundation_template': 
-					case 'foundation_system': {
+					case 'phocus_application': 
+					case 'phocus_database': 
+					case 'phocus_ini': 
+					case 'phocus_fault': 
+					case 'phocus_template': 
+					case 'phocus_system': {
 						$sub='_core/';
 					break; }
 					//
@@ -71,14 +71,14 @@ print "</pre>";
 				$include=@include($target_file);
 				if ($include===FALSE)
 				{
-					if ($class_name==='foundation_fault')
+					if ($class_name==='phocus_fault')
 					{
 						throw new Exception("Class file did not load: [$class_name]", __LINE__, NULL);
 					}
 					else
 					{
-						throw new foundation_fault("Class file did not load [$class_name]", origin());
-					} // if ($class_name==='foundation_fault')
+						throw new phocus_fault("Class file did not load [$class_name]", origin());
+					} // if ($class_name==='phocus_fault')
 				} // if ($include===FALSE)
 				//
 				return;
@@ -110,13 +110,13 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_string($application_name)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not string.  It is ['.gettype($application_name).']', origin());
+					throw new phocus_fault('Parameter is not string.  It is ['.gettype($application_name).']', origin());
 				} // if (is_string($application_name)!==TRUE)
 				//
 				//
@@ -126,7 +126,7 @@ print "</pre>";
 					// No, application class file does not exist
 					//
 					// Drop to the generic application
-					$application_class_name='foundation_application';
+					$application_class_name='phocus_application';
 				}
 				else
 				{
@@ -138,7 +138,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot get application class', origin(), $e);
+				throw new phocus_fault('Cannot get application class', origin(), $e);
 			} // try
 		} // application_class()
 		//
@@ -160,7 +160,7 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==0)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==0)
 				//
 				//
@@ -176,7 +176,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get application name', origin(), $e);
+				throw new phocus_fault('Could not get application name', origin(), $e);
 			} // try
 		} // application_name()
 		//
@@ -198,7 +198,7 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==0)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==0)
 				//
 				//
@@ -210,14 +210,14 @@ print "</pre>";
 				if ($database===FALSE)
 				{
 					// No database connection
-					throw new foundation_fault('No database connection', origin());
+					throw new phocus_fault('No database connection', origin());
 				} // if ($database===FALSE)
 				//
 				return $database->fetch();
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not fetch row', origin(), $e);
+				throw new phocus_fault('Could not fetch row', origin(), $e);
 			} // try
 		} // fetch()
 		//
@@ -281,7 +281,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not show page', origin(), $e);
+				throw new phocus_fault('Could not show page', origin(), $e);
 			} // try
 		} // generic_HTML()
 		//
@@ -304,7 +304,7 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==2)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==2)
 				//
 				//
@@ -314,12 +314,12 @@ print "</pre>";
 				//
 				if (is_array($backtrace)!==TRUE)
 				{
-					throw new foundation_fault('$backtrace is ['.gettype($backtrace).'] not array', origin());
+					throw new phocus_fault('$backtrace is ['.gettype($backtrace).'] not array', origin());
 				}
 				//
 				if (is_int($line)!==TRUE)
 				{
-					throw new foundation_fault('$line is ['.gettype($line).'] not int', origin());
+					throw new phocus_fault('$line is ['.gettype($line).'] not int', origin());
 				}
 				//
 				//
@@ -329,22 +329,22 @@ print "</pre>";
 				//
 				if (array_key_exists($line, $backtrace)===FALSE)
 				{
-					throw new foundation_fault('Line not found', $line);
+					throw new phocus_fault('Line not found', $line);
 				}
 				//
 				if (is_array($backtrace[$line])===FALSE)
 				{
-					throw new foundation_fault('backtrace missing element '.$line, '');
+					throw new phocus_fault('backtrace missing element '.$line, '');
 				}
 				//
 				if (array_key_exists('file', $backtrace[$line])===FALSE)
 				{
-					throw new foundation_fault("backtrace missing 'file' element", '');
+					throw new phocus_fault("backtrace missing 'file' element", '');
 				}
 				//
 				if (array_key_exists('line', $backtrace[$line])===FALSE)
 				{
-					throw new foundation_fault("backtrace missing 'line' element", '');
+					throw new phocus_fault("backtrace missing 'line' element", '');
 				}
 				//
 				$origin=$backtrace[$line]['file'].' @ '.$backtrace[$line]['line'];
@@ -353,7 +353,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot get backtrace origin', origin(), $e);
+				throw new phocus_fault('Cannot get backtrace origin', origin(), $e);
 			} // try
 		} // backtrace_origin()
 		//
@@ -374,12 +374,12 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				if (is_string($target)!==TRUE)
 				{
-					throw new foundation_fault('Invalid target type ['.gettype($target).']', origin());
+					throw new phocus_fault('Invalid target type ['.gettype($target).']', origin());
 				}
 				//
 				//
@@ -389,14 +389,14 @@ print "</pre>";
 				// 
 				if (array_key_exists($target, $_GET)!==TRUE)
 				{
-					throw new foundation_fault("\$_GET is missing [$target]", origin());
+					throw new phocus_fault("\$_GET is missing [$target]", origin());
 				} // if (array_key_exists($target, $_GET)!==TRUE)
 				//
 				return $_GET[$target];
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('GET does not have required data', origin(), $e);
+				throw new phocus_fault('GET does not have required data', origin(), $e);
 			} // try
 		} // confirm_get_element()
 		//
@@ -419,7 +419,7 @@ print "</pre>";
 				$arg_count2=func_num_args();
 				if ($arg_count2!==2)
 				{
-					throw new foundation_fault("Invalid args [$arg_count2]", origin());
+					throw new phocus_fault("Invalid args [$arg_count2]", origin());
 				} // if ($arg_count2!==2)
 				//
 				confirm_int($arg_count);
@@ -432,14 +432,14 @@ print "</pre>";
 				//
 				if ($arg_count!==$target)
 				{
-					throw new foundation_fault("Invalid arg count: $arg_count", origin());
+					throw new phocus_fault("Invalid arg count: $arg_count", origin());
 				} // if ($arg_count!==$target)
 				//
 				return TRUE;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm arg count', origin(), $e);
+				throw new phocus_fault('Could not confirm arg count', origin(), $e);
 			} // try
 		} // confirm_args()
 		//
@@ -462,17 +462,17 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==2)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				if ((is_string($needle)!==TRUE) && (is_int($needle)!==TRUE))
 				{
-					throw new foundation_fault('$needle is not string or int ['.gettype($needle).']', origin());
+					throw new phocus_fault('$needle is not string or int ['.gettype($needle).']', origin());
 				}
 				//
 				if (is_array($haystack)!==TRUE)
 				{
-					throw new foundation_fault('$haystack is not array ['.gettype($haystack).']', origin());
+					throw new phocus_fault('$haystack is not array ['.gettype($haystack).']', origin());
 				}
 				//
 				//
@@ -482,14 +482,14 @@ print "</pre>";
 				// 
 				if (array_key_exists($needle, $haystack)!==TRUE)
 				{
-					throw new foundation_fault("array element missing [$needle]", origin());
+					throw new phocus_fault("array element missing [$needle]", origin());
 				} // if (array_key_exists($needle, $haystack)!==TRUE)
 				//
 				return TRUE;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Array does not have required element', origin(), $e);
+				throw new phocus_fault('Array does not have required element', origin(), $e);
 			} // try
 		} // confirm_array_element()
 		//
@@ -511,12 +511,12 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				if (is_string($target)!==TRUE)
 				{
-					throw new foundation_fault('$target is not string ['.gettype($target).']', origin());
+					throw new phocus_fault('$target is not string ['.gettype($target).']', origin());
 				}
 				//
 				//
@@ -526,14 +526,14 @@ print "</pre>";
 				// 
 				if (array_key_exists($target, $_POST)!==TRUE)
 				{
-					throw new foundation_fault("\$_POST is missing [$target]", origin());
+					throw new phocus_fault("\$_POST is missing [$target]", origin());
 				} // if (array_key_exists($target, $_POST)!==TRUE)
 				//
 				return $_POST[$target];
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('POST does not have required data', origin(), $e);
+				throw new phocus_fault('POST does not have required data', origin(), $e);
 			} // try
 		} // confirm_post_element()
 		//
@@ -555,20 +555,20 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_array($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not array.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not array.  It is ['.gettype($test_me).']', origin());
 				} // if (is_array($test_me)!==TRUE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm array', origin(), $e);
+				throw new phocus_fault('Could not confirm array', origin(), $e);
 			} // try
 		} // confirm_array()
 		//
@@ -590,20 +590,20 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_bool($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not boolean.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not boolean.  It is ['.gettype($test_me).']', origin());
 				} // if (is_bool($test_me)!==TRUE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm boolean', origin(), $e);
+				throw new phocus_fault('Could not confirm boolean', origin(), $e);
 			} // try
 		} // confirm_boolean()
 		//
@@ -625,20 +625,20 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_double($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not double.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not double.  It is ['.gettype($test_me).']', origin());
 				} // if (is_double($test_me)!==TRUE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm double', origin(), $e);
+				throw new phocus_fault('Could not confirm double', origin(), $e);
 			} // try
 		} // confirm_double()
 		//
@@ -660,20 +660,20 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_int($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not integer.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not integer.  It is ['.gettype($test_me).']', origin());
 				} // if (is_int($test_me)!==TRUE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm integer', origin(), $e);
+				throw new phocus_fault('Could not confirm integer', origin(), $e);
 			} // try
 		} // confirm_string()
 		//
@@ -729,19 +729,19 @@ print "</pre>";
 					break; }
 					//
 					default: {
-						throw new foundation_fault("Invalid args [$arg_count]", origin());
+						throw new phocus_fault("Invalid args [$arg_count]", origin());
 					break; }
 				} // switch ($arg_count)
 				//
 				//
 				if (is_string($valid)!==TRUE)
 				{
-					throw new foundation_fault('$valid is not null.  It is ['.gettype($valid).']', origin());
+					throw new phocus_fault('$valid is not null.  It is ['.gettype($valid).']', origin());
 				} // if (is_string($valid)!==TRUE)
 				//
 				if (is_string($name)!==TRUE)
 				{
-					throw new foundation_fault('$name is not null.  It is ['.gettype($name).']', origin());
+					throw new phocus_fault('$name is not null.  It is ['.gettype($name).']', origin());
 				} // if (is_string($name)!==TRUE)
 				//
 				//
@@ -752,7 +752,7 @@ print "</pre>";
 				{
 					if (strpos('ABDINORS', $type)===FALSE)
 					{
-						throw new foundation_fault("\$haystack has invalid type.  [$type]", origin());
+						throw new phocus_fault("\$haystack has invalid type.  [$type]", origin());
 					} // switch ($type)
 				} // foreach($check as $type)
 				//
@@ -806,7 +806,7 @@ print "</pre>";
 										$class=get_class($test_me);
 										if ($class!==$name)
 										{
-											throw new foundation_fault("\$test_me is invalid class. expected [$class].  Found [$name]", origin());
+											throw new phocus_fault("\$test_me is invalid class. expected [$class].  Found [$name]", origin());
 										}
 										else
 										{
@@ -828,7 +828,7 @@ print "</pre>";
 										$type=get_resource_type($test_me);
 										if ($type!==$name)
 										{
-											throw new foundation_fault("\$test_me is invalid class. expected [$class].  Found [$type]", origin());
+											throw new phocus_fault("\$test_me is invalid class. expected [$class].  Found [$type]", origin());
 										}
 										else
 										{
@@ -850,17 +850,17 @@ print "</pre>";
 							break; }
 							//
 							default: {
-								throw new foundation_fault("\$test_me has invalid type. expected [$valid].  Found [".gettype($test_me).']', origin());
+								throw new phocus_fault("\$test_me has invalid type. expected [$valid].  Found [".gettype($test_me).']', origin());
 							break; }
 						} // switch ($type)
 					} // if ($found===FALSE)
 				} // foreach($check as $type)
 				//
-				throw new foundation_fault("\$test_me not [$valid].  Found [".gettype($test_me).']', origin());
+				throw new phocus_fault("\$test_me not [$valid].  Found [".gettype($test_me).']', origin());
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm mixed', origin(), $e);
+				throw new phocus_fault('Could not confirm mixed', origin(), $e);
 			} // try
 		} // confirm_mixed()
 		//
@@ -882,20 +882,20 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_null($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Not null.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Not null.  It is ['.gettype($test_me).']', origin());
 				} // if (is_null($test_me)!==TRUE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm null', origin(), $e);
+				throw new phocus_fault('Could not confirm null', origin(), $e);
 			} // try
 		} // confirm_null()
 		//
@@ -933,19 +933,19 @@ print "</pre>";
 					break; }
 					//
 					default: {
-						throw new foundation_fault("Invalid args [$arg_count]", origin());
+						throw new phocus_fault("Invalid args [$arg_count]", origin());
 					break; }
 				} // switch ($arg_count)
 				//
 				if (is_string($name)!==TRUE)
 				{
-					throw new foundation_fault('$name is not a string.  It is ['.gettype($name).']', origin());
+					throw new phocus_fault('$name is not a string.  It is ['.gettype($name).']', origin());
 				} // if (is_string($name)!==TRUE)
 				//
 				//
 				if (is_object($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not object.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not object.  It is ['.gettype($test_me).']', origin());
 				}
 				else
 				{
@@ -954,7 +954,7 @@ print "</pre>";
 						$class=get_class($test_me);
 						if ($class!==$name)
 						{
-							throw new foundation_fault("Parameter is incorrect class.  It is [$class]", origin());
+							throw new phocus_fault("Parameter is incorrect class.  It is [$class]", origin());
 						} // if ($class!==$name)
 					} // if ($name!=='')
 				} // if (is_object($test_me)!==TRUE)
@@ -963,7 +963,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm object', origin(), $e);
+				throw new phocus_fault('Could not confirm object', origin(), $e);
 			} // try
 		} // confirm_object()
 		//
@@ -1001,19 +1001,19 @@ print "</pre>";
 					break; }
 					//
 					default: {
-						throw new foundation_fault("Invalid args [$arg_count]", origin());
+						throw new phocus_fault("Invalid args [$arg_count]", origin());
 					break; }
 				} // switch ($arg_count)
 				//
 				if (is_string($name)!==TRUE)
 				{
-					throw new foundation_fault('$name is not a string.  It is ['.gettype($name).']', origin());
+					throw new phocus_fault('$name is not a string.  It is ['.gettype($name).']', origin());
 				} // if (is_string($name)!==TRUE)
 				//
 				//
 				if (is_resource($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Not a resource.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Not a resource.  It is ['.gettype($test_me).']', origin());
 				}
 				else
 				{
@@ -1022,7 +1022,7 @@ print "</pre>";
 						$type=get_resource_type($test_me);
 						if ($type!==$name)
 						{
-							throw new foundation_fault("Incorrect resource type.  expected [$name].  It is [$type]", origin());
+							throw new phocus_fault("Incorrect resource type.  expected [$name].  It is [$type]", origin());
 						} // if ($type!==$name)
 					} // if ($name!=='')
 				} // if (is_resource($test_me)!==TRUE)
@@ -1031,7 +1031,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm resource', origin(), $e);
+				throw new phocus_fault('Could not confirm resource', origin(), $e);
 			} // try
 		} // confirm_resource()
 		//
@@ -1054,30 +1054,30 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_string($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not string.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not string.  It is ['.gettype($test_me).']', origin());
 				} // if (is_string($test_me)!==TRUE)
 				//
 				if (strpos($test_me, '..')!==FALSE)
 				{
-					throw new foundation_fault('Invalid path', $test_me);
+					throw new phocus_fault('Invalid path', $test_me);
 				} // if (strpos($test_me, '..')!==FALSE)
 				//
 				if (strpos($test_me, '/')!==FALSE)
 				{
-					throw new foundation_fault('Invalid path', $test_me);
+					throw new phocus_fault('Invalid path', $test_me);
 				} // if (strpos($test_me, '/')!==FALSE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm path safe', origin(), $e);
+				throw new phocus_fault('Could not confirm path safe', origin(), $e);
 			} // try
 		} // confirm_path_safe()
 		//
@@ -1099,20 +1099,20 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				//
 				if (is_string($test_me)!==TRUE)
 				{
-					throw new foundation_fault('Parameter is not string.  It is ['.gettype($test_me).']', origin());
+					throw new phocus_fault('Parameter is not string.  It is ['.gettype($test_me).']', origin());
 				} // if (is_string($test_me)!==TRUE)
 				//
 				return $test_me;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not confirm string', origin(), $e);
+				throw new phocus_fault('Could not confirm string', origin(), $e);
 			} // try
 		} // confirm_string()
 		//
@@ -1135,12 +1135,12 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==1)
 				//
 				if (is_string($encoded)!==TRUE)
 				{
-					throw new foundation_fault('$encoded is not string.  It is ['.gettype($encoded).']', origin());
+					throw new phocus_fault('$encoded is not string.  It is ['.gettype($encoded).']', origin());
 				} // if (is_string($test_me)!==TRUE)
 				//
 				//
@@ -1152,14 +1152,14 @@ print "</pre>";
 				//
 				if ($decoded===FALSE)
 				{
-					throw new foundation_fault('Base64 decode failed', $encoded);
+					throw new phocus_fault('Base64 decode failed', $encoded);
 				}
 				//
 				return $decoded;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot base64 decode', origin(), $e);
+				throw new phocus_fault('Cannot base64 decode', origin(), $e);
 			} // try
 		} // do_base64_decode()
 		//
@@ -1183,27 +1183,27 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==4)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==4)
 				//
 				if (is_string($to)!==TRUE)
 				{
-					throw new foundation_fault('to is not string ['.gettype($to).']', origin());
+					throw new phocus_fault('to is not string ['.gettype($to).']', origin());
 				}
 				//
 				if (is_string($to_name)!==TRUE)
 				{
-					throw new foundation_fault('to_name is not string ['.gettype($to_name).']', origin());
+					throw new phocus_fault('to_name is not string ['.gettype($to_name).']', origin());
 				}
 				//
 				if (is_string($subject)!==TRUE)
 				{
-					throw new foundation_fault('subject is not string ['.gettype($subject).']', origin());
+					throw new phocus_fault('subject is not string ['.gettype($subject).']', origin());
 				}
 				//
 				if (is_string($body)!==TRUE)
 				{
-					throw new foundation_fault('body is not string ['.gettype($body).']', origin());
+					throw new phocus_fault('body is not string ['.gettype($body).']', origin());
 				}
 				//
 				//
@@ -1240,14 +1240,14 @@ print "</pre>";
 				//
 				if ($send!==TRUE)
 				{
-					throw new foundation_fault('Could not send email', $mail->ErrorInfo);
+					throw new phocus_fault('Could not send email', $mail->ErrorInfo);
 				}
 				//
 				return $send;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Error sending email', origin(), $e);
+				throw new phocus_fault('Error sending email', origin(), $e);
 			} // try
 		} // my_mail()
 		//
@@ -1273,36 +1273,36 @@ print "</pre>";
 					if (is_array($backtrace)!==TRUE)
 					{
 						$backtrace_serialize=serialize(is_array($backtrace));
-						throw new foundation_fault('backtrace invalid', var_to_HMTL($backtrace));
+						throw new phocus_fault('backtrace invalid', var_to_HMTL($backtrace));
 					}
 					//
 					if (array_key_exists(0, $backtrace)===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault('backtrace incomplete', var_to_HMTL($backtrace));
+						throw new phocus_fault('backtrace incomplete', var_to_HMTL($backtrace));
 					}
 					//
 					if (is_array($backtrace[0])===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault('backtrace missing element 1', var_to_HMTL($backtrace));
+						throw new phocus_fault('backtrace missing element 1', var_to_HMTL($backtrace));
 					}
 					//
 					if (array_key_exists('file', $backtrace[0])===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault("backtrace missing 'file' element", var_to_HMTL($backtrace));
+						throw new phocus_fault("backtrace missing 'file' element", var_to_HMTL($backtrace));
 					}
 					//
 					if (array_key_exists('line', $backtrace[0])===FALSE)
 					{
 						$backtrace_serialize=serialize($backtrace);
-						throw new foundation_fault("backtrace missing 'line' element", var_to_HMTL($backtrace));
+						throw new phocus_fault("backtrace missing 'line' element", var_to_HMTL($backtrace));
 					}
 					//
 					$origin=$backtrace[0]['file'].' @ '.$backtrace[0]['line'];
 					//
-					throw new foundation_fault("Invalid args [$arg_count]", $origin);
+					throw new phocus_fault("Invalid args [$arg_count]", $origin);
 				} // if ($arg_count!==0)
 				//
 				//
@@ -1315,31 +1315,31 @@ print "</pre>";
 				if (is_array($backtrace)!==TRUE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace invalid', var_to_HMTL($backtrace));
+					throw new phocus_fault('backtrace invalid', var_to_HMTL($backtrace));
 				}
 				//
 				if (array_key_exists(1, $backtrace)===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace incomplete', var_to_HMTL($backtrace));
+					throw new phocus_fault('backtrace incomplete', var_to_HMTL($backtrace));
 				}
 				//
 				if (is_array($backtrace[1])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace missing element 1', var_to_HMTL($backtrace));
+					throw new phocus_fault('backtrace missing element 1', var_to_HMTL($backtrace));
 				}
 				//
 				if (array_key_exists('file', $backtrace[1])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault("backtrace missing 'file' element", var_to_HMTL($backtrace));
+					throw new phocus_fault("backtrace missing 'file' element", var_to_HMTL($backtrace));
 				}
 				//
 				if (array_key_exists('line', $backtrace[1])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault("backtrace missing 'line' element", var_to_HMTL($backtrace));
+					throw new phocus_fault("backtrace missing 'line' element", var_to_HMTL($backtrace));
 				}
 				//
 				//
@@ -1349,7 +1349,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot get origin', origin(), $e);
+				throw new phocus_fault('Cannot get origin', origin(), $e);
 			} // try
 		} // origin()
 		//
@@ -1383,13 +1383,13 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count===0)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count===0)
 				//
 				$SQL=func_get_arg(0);
 				if (is_string($SQL)===FALSE)
 				{
-					throw new foundation_fault('SQL is not string ['.gettype($SQL).']', origin());
+					throw new phocus_fault('SQL is not string ['.gettype($SQL).']', origin());
 				} // if (is_string($SQL)===FALSE)
 				//
 				$form=3;
@@ -1406,7 +1406,7 @@ print "</pre>";
 					{
 						if ($arg_count!==2)
 						{
-							throw new foundation_fault("Invalid args for FORM 2 [$arg_count]", origin());
+							throw new phocus_fault("Invalid args for FORM 2 [$arg_count]", origin());
 						} // if ($arg_count!==2)
 						//
 						$form=2;
@@ -1425,7 +1425,7 @@ print "</pre>";
 						{
 							if ((is_string($arg)===FALSE) && (is_numeric($arg)===FALSE))
 							{
-								throw new foundation_fault("Invalid \$args[$key]=>".gettype($arg), origin());
+								throw new phocus_fault("Invalid \$args[$key]=>".gettype($arg), origin());
 							} // if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
 						} // foreach ($args as $key=>$arg)
 					break; }
@@ -1439,7 +1439,7 @@ print "</pre>";
 								$args[$a]=func_get_arg($a);
 								if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
 								{
-									throw new foundation_fault("Invalid arg type [$a]=>".gettype($args[$a]), origin());
+									throw new phocus_fault("Invalid arg type [$a]=>".gettype($args[$a]), origin());
 								} // if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
 							} // for ($a=1; $a<$arg_count; $a++)
 						} // if ($arg_count>1)
@@ -1456,7 +1456,7 @@ print "</pre>";
 				{
 					// No database connection
 					// Connect to the database
-					$database=new foundation_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
+					$database=new phocus_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1465,7 +1465,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not do query', origin(), $e);
+				throw new phocus_fault('Could not do query', origin(), $e);
 			} // try
 		} // query()
 		//
@@ -1505,13 +1505,13 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count<1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count<1)
 				//
 				$SQL=func_get_arg(0);
 				if (is_string($SQL)===FALSE)
 				{
-					throw new foundation_fault('SQL is not string ['.gettype($SQL).']', origin());
+					throw new phocus_fault('SQL is not string ['.gettype($SQL).']', origin());
 				} // if (is_string($SQL)===FALSE)
 				//
 				switch ($arg_count)
@@ -1539,7 +1539,7 @@ print "</pre>";
 						{
 							if ((is_string($args)===FALSE) && (is_numeric($args)===FALSE))
 							{
-								throw new foundation_fault("Invalid arg type=>".gettype($args), origin());
+								throw new phocus_fault("Invalid arg type=>".gettype($args), origin());
 							}
 							$value=$args;
 							$args=array();
@@ -1557,7 +1557,7 @@ print "</pre>";
 							$args[$b]=func_get_arg($a);
 							if ((is_string($args[$b])===FALSE) && (is_numeric($args[$b])===FALSE))
 							{
-								throw new foundation_fault("Invalid arg type [$b]=>".gettype($args[$b]), origin());
+								throw new phocus_fault("Invalid arg type [$b]=>".gettype($args[$b]), origin());
 							} // if ((is_string($args[$b])===FALSE) && (is_numeric($args[$b])===FALSE))
 						} // for ($a=2; $a<$arg_count; $a++)
 						$form=4;
@@ -1568,7 +1568,7 @@ print "</pre>";
 				{
 					if (is_string($unique)===FALSE)
 					{
-						throw new foundation_fault('unique is not string ['.gettype($unique).']', origin());
+						throw new phocus_fault('unique is not string ['.gettype($unique).']', origin());
 					} // if (is_string($unique)===FALSE)
 				} // if ($form!=1)
 				//
@@ -1582,7 +1582,7 @@ print "</pre>";
 				{
 					// No database connection
 					// Connect to the database
-					$database=new foundation_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
+					$database=new phocus_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1612,7 +1612,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not do query', origin(), $e);
+				throw new phocus_fault('Could not do query', origin(), $e);
 			} // try
 		} // query_fetch_all_unique()
 		//
@@ -1646,13 +1646,13 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count===0)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count===0)
 				//
 				$SQL=func_get_arg(0);
 				if (is_string($SQL)===FALSE)
 				{
-					throw new foundation_fault('SQL is not string. It is ['.gettype($SQL).']', origin());
+					throw new phocus_fault('SQL is not string. It is ['.gettype($SQL).']', origin());
 				} // if (is_string($SQL)===FALSE)
 				//
 				$form=3;
@@ -1669,7 +1669,7 @@ print "</pre>";
 					{
 						if ($arg_count!==2)
 						{
-							throw new foundation_fault("Invalid args for FORM 2 [$arg_count]", origin());
+							throw new phocus_fault("Invalid args for FORM 2 [$arg_count]", origin());
 						} // if ($arg_count!==2)
 						//
 						$form=2;
@@ -1688,7 +1688,7 @@ print "</pre>";
 						{
 							if ((is_string($arg)===FALSE) && (is_numeric($arg)===FALSE))
 							{
-								throw new foundation_fault("Invalid \$args[$key]=>".gettype($arg), origin());
+								throw new phocus_fault("Invalid \$args[$key]=>".gettype($arg), origin());
 							} // if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
 						} // foreach ($args as $key=>$arg)
 					break; }
@@ -1702,7 +1702,7 @@ print "</pre>";
 								$args[$a]=func_get_arg($a);
 								if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
 								{
-									throw new foundation_fault("Invalid arg type [$a]=>".gettype($args[$a]), origin());
+									throw new phocus_fault("Invalid arg type [$a]=>".gettype($args[$a]), origin());
 								} // if ((is_string($args[$a])===FALSE) && (is_numeric($args[$a])===FALSE))
 							} // for ($a=1; $a<$arg_count; $a++)
 						} // if ($arg_count>1)
@@ -1719,7 +1719,7 @@ print "</pre>";
 				{
 					// No database connection
 					// Connect to the database
-					$database=new foundation_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
+					$database=new phocus_database($ini->get_ini('database_host'), $ini->get_ini('database_user'), $ini->get_ini('database_password'), $ini->get_ini('database_name'));
 				} // if ($database===FALSE)
 				//
 				$database->query($SQL, $args);
@@ -1737,7 +1737,7 @@ print "</pre>";
 					break; }
 					//
 					default: {
-						throw new foundation_fault("Invalid number of rows found: [$row_count]", origin());
+						throw new phocus_fault("Invalid number of rows found: [$row_count]", origin());
 					break; }
 				} // switch ($row_count)
 				//
@@ -1745,7 +1745,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not query_one', origin(), $e);
+				throw new phocus_fault('Could not query_one', origin(), $e);
 			} // try
 		} // query_one()
 		//
@@ -1785,14 +1785,14 @@ print "</pre>";
 				if ($data===FALSE)
 				{
 					// No, did not read
-					throw new foundation_fault('File did not read', $path);
+					throw new phocus_fault('File did not read', $path);
 				} // if ($data===FALSE)
 				//
 				return $data;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not read file', origin(), $e);
+				throw new phocus_fault('Could not read file', origin(), $e);
 			} // try
 		} // file_read()
 		//
@@ -1830,14 +1830,14 @@ print "</pre>";
 				if ($saved===FALSE)
 				{
 					// No, did not save
-					throw new foundation_fault('File not saved', $path);
+					throw new phocus_fault('File not saved', $path);
 				} // if ($saved===FALSE)
 				//
 				return TRUE;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not save file', origin(), $e);
+				throw new phocus_fault('Could not save file', origin(), $e);
 			} // try
 		} // file_save()
 		//
@@ -1859,7 +1859,7 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count!==0)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count!==0)
 				//
 				//
@@ -1871,14 +1871,14 @@ print "</pre>";
 				if ($database===FALSE)
 				{
 					// No database connection
-					throw new foundation_fault('No database connection', origin());
+					throw new phocus_fault('No database connection', origin());
 				} // if ($database===FALSE)
 				//
 				return $database->row_count();
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get row count', origin(), $e);
+				throw new phocus_fault('Could not get row count', origin(), $e);
 			} // try
 		} // row_count()
 		//
@@ -1900,7 +1900,7 @@ print "</pre>";
 				$arg_count=func_num_args();
 				if ($arg_count>1)
 				{
-					throw new foundation_fault("Invalid args [$arg_count]", origin());
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
 				} // if ($arg_count>1)
 				//
 				//
@@ -1991,31 +1991,31 @@ print "</pre>";
 				if (is_array($backtrace)!==TRUE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace invalid', $backtrace_serialize);
+					throw new phocus_fault('backtrace invalid', $backtrace_serialize);
 				}
 				//
 				if (array_key_exists(0, $backtrace)===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace incomplete', $backtrace_serialize);
+					throw new phocus_fault('backtrace incomplete', $backtrace_serialize);
 				}
 				//
 				if (is_array($backtrace[0])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault('backtrace missing element 0', $backtrace_serialize);
+					throw new phocus_fault('backtrace missing element 0', $backtrace_serialize);
 				}
 				//
 				if (array_key_exists('file', $backtrace[0])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault("backtrace missing 'file' element", $backtrace_serialize);
+					throw new phocus_fault("backtrace missing 'file' element", $backtrace_serialize);
 				}
 				//
 				if (array_key_exists('line', $backtrace[0])===FALSE)
 				{
 					$backtrace_serialize=serialize($backtrace);
-					throw new foundation_fault("backtrace missing 'line' element", $backtrace_serialize);
+					throw new phocus_fault("backtrace missing 'line' element", $backtrace_serialize);
 				}
 				//
 				//
@@ -2027,7 +2027,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot trace', origin(), $e);
+				throw new phocus_fault('Cannot trace', origin(), $e);
 			} // try
 		} // trace()
 		//
@@ -2136,7 +2136,7 @@ print "</pre>";
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not output variable to HTML', origin());
+				throw new phocus_fault('Could not output variable to HTML', origin());
 			} // try
 		} // var_to_HTML()
 	}
@@ -2150,9 +2150,9 @@ print "</pre>";
 		spl_autoload_register('class_autoloader');
 		//
 		$application_name=application_name();
-		$ini=new foundation_ini($application_name);
+		$ini=new phocus_ini($application_name);
 //trace($ini);
-		$show_debug=$ini->get_ini('show_debug', foundation_ini::INI_OPTIONAL);
+		$show_debug=$ini->get_ini('show_debug', phocus_ini::INI_OPTIONAL);
 $show_debug=TRUE;
 		$application_class=application_class($application_name);
 		$application=new $application_class($ini);

@@ -1,8 +1,8 @@
 <?php
 	//
-	// foundation_system.php
+	// phocus_system.php
 	//
-	class foundation_system
+	class phocus_system
 	{
 		const INI_OPTIONAL = 1;
 		//
@@ -33,7 +33,7 @@ trace("\$application_name=$application_name");
 					break; }
 					//
 					default: {
-						throw new foundation_fault('Invalid argument count', $arg_count);
+						throw new phocus_fault('Invalid argument count', $arg_count);
 					break; }
 				} // switch ($arg_count)
 trace("\$this->application_name={$this->application_name}");
@@ -68,7 +68,7 @@ trace("\$this->application_ini_path={$this->application_ini_path}");
 					// No, ini does not exist
 					//
 					// Let's try to get the installation sample ini
-					$template=new foundation_template('foundation_application.ini', foundation_template::CORE);
+					$template=new phocus_template('phocus_application.ini', phocus_template::CORE);
 					//
 					$template->add_token('DATABASE_HOST', '');
 					$template->add_token('DATABASE_USER', '');
@@ -88,7 +88,7 @@ trace("\$this->application_ini_path={$this->application_ini_path}");
 				if (file_exists($this->application_ini_path)!==TRUE)
 				{
 					// No, ini file is missing
-					throw new foundation_fault('Missing ini file', $this->application_ini_path);
+					throw new phocus_fault('Missing ini file', $this->application_ini_path);
 				}
 				else
 				{
@@ -99,7 +99,7 @@ trace("\$this->application_ini_path={$this->application_ini_path}");
 					if ($this->ini===FALSE)
 					{
 						// No, did not parse
-						throw new foundation_fault('Could not parse ini', $this->application_ini_path);
+						throw new phocus_fault('Could not parse ini', $this->application_ini_path);
 					} // if ($this->ini===FALSE)
 				} // if (file_exists($this->application_ini_path)!==TRUE)
 				//
@@ -111,7 +111,7 @@ trace("\$this->application_ini_path={$this->application_ini_path}");
 					// No, application class file does not exist
 					//
 					// Drop to the generic application
-					$this->application_name='foundation_application';
+					$this->application_name='phocus_application';
 				} // if (file_exists($application_class_path)!==TRUE)
 trace("\$this->application_name={$this->application_name}");
 				//
@@ -119,7 +119,7 @@ trace("\$this->application_name={$this->application_name}");
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot launch Foundation System', '', $e);
+				throw new phocus_fault('Cannot launch Foundation System', '', $e);
 			} // try
 		} // __construct()
 		//
@@ -140,7 +140,7 @@ trace("\$this->application_name={$this->application_name}");
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get application_class_path', $e);
+				throw new phocus_fault('Could not get application_class_path', $e);
 			} // try
 		} // get_application_class_path()
 		*/
@@ -162,7 +162,7 @@ trace("\$this->application_name={$this->application_name}");
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get database', $e);
+				throw new phocus_fault('Could not get database', $e);
 			} // try
 		} // get_database()
 		*/
@@ -195,10 +195,10 @@ trace("\$this->application_name={$this->application_name}");
 						confirm_string($ini);
 						confirm_int($optional);
 						//
-						if ($optional!==foundation_system::INI_OPTIONAL)
+						if ($optional!==phocus_system::INI_OPTIONAL)
 						{
-							throw new foundation_fault('Unknown option', $optional);
-						} // if ($optional!==foundation_application::INI_OPTIONAL)
+							throw new phocus_fault('Unknown option', $optional);
+						} // if ($optional!==phocus_application::INI_OPTIONAL)
 						//
 						if (array_key_exists($ini, $this->ini)!==TRUE)
 						{
@@ -211,7 +211,7 @@ trace("\$this->application_name={$this->application_name}");
 					break; }
 					//
 					default: {
-						throw new foundation_fault('Invalid argument count', $arg_count);
+						throw new phocus_fault('Invalid argument count', $arg_count);
 					break; }
 				} // switch ($arg_count)
 				//
@@ -219,7 +219,7 @@ trace("\$this->application_name={$this->application_name}");
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot return ini', '', $e);
+				throw new phocus_fault('Cannot return ini', '', $e);
 			} // try
 		} // get_ini()
 		//
@@ -239,7 +239,7 @@ trace("\$this->application_name={$this->application_name}");
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get application_ini_path', $e);
+				throw new phocus_fault('Could not get application_ini_path', $e);
 			} // try
 		} // get_application_ini_path()
 		//
@@ -300,7 +300,7 @@ trace("\$this->application_name={$this->application_name}");
 				if (method_exists($application, $command)!==TRUE)
 				{
 					// No, command is missing
-					throw new foundation_fault('Invalid command', $command);
+					throw new phocus_fault('Invalid command', $command);
 				}
 				else
 				{
@@ -313,8 +313,8 @@ trace("\$this->application_name={$this->application_name}");
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Cannot render', '', $e);
+				throw new phocus_fault('Cannot render', '', $e);
 			} // try
 		} // render()
-	} // foundation_system
+	} // phocus_system
 ?>

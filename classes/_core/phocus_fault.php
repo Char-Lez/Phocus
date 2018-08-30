@@ -1,8 +1,8 @@
 <?php
 	//
-	// foundation_fault.php
+	// phocus_fault.php
 	//
-	class foundation_fault extends Exception
+	class phocus_fault extends Exception
 	{
 		private $data;
 		protected $file;
@@ -36,7 +36,7 @@
 				{
 					case 0:
 					case 1: {
-						throw new foundation_fault("insufficient arguments [$argument_count]", origin());
+						throw new phocus_fault("insufficient arguments [$argument_count]", origin());
 					break; }
 					//
 					case 2: 
@@ -45,7 +45,7 @@
 					break; }
 					//
 					default: {
-						throw new foundation_fault("too many arguments [$argument_count]", origin());
+						throw new phocus_fault("too many arguments [$argument_count]", origin());
 					break; }
 				} // switch ($argument_count)
 				//
@@ -63,17 +63,17 @@
 					{
 						// Not an object
 						$type=gettype($previous);
-						throw new foundation_fault("previous is not an object: [$type]", origin());
+						throw new phocus_fault("previous is not an object: [$type]", origin());
 					}
 					else
 					{
 						// Yes, an object
 						$class=get_class($previous);
 						// Is it the right class?
-						if (($class!=='foundation_fault') && ($class!=='Exception') && ($class!=='Error'))
+						if (($class!=='phocus_fault') && ($class!=='Exception') && ($class!=='Error'))
 						{
 							// Not the right class
-							throw new foundation_fault("previous is not class foundation_fault, Exception, or Error: [$class]", origin());
+							throw new phocus_fault("previous is not class phocus_fault, Exception, or Error: [$class]", origin());
 						} // if (($class!=='fault') && ($class!=='Exception') && ($class!=='Error'))
 					} // if (is_object($previous)===FALSE)
 				} // if (is_null($previous)===FALSE)
@@ -83,7 +83,7 @@
 				{
 					// Not a string
 					$type=gettype($message);
-					throw new foundation_fault("message is not a string: [$type]", origin());
+					throw new phocus_fault("message is not a string: [$type]", origin());
 				} // if (is_string($message)===FALSE)
 				//
 				// Is $data a string or numeric?
@@ -91,7 +91,7 @@
 				{
 					// Not a string or numeric
 					$type=gettype($data);
-					throw new foundation_fault("data is not a string or numeric: [$type]", origin());
+					throw new phocus_fault("data is not a string or numeric: [$type]", origin());
 				} // if ((is_string($data)===FALSE) && (is_numeric($data)===FALSE))
 				//
 				// All the data is present and the types are correct
@@ -164,7 +164,7 @@
 				//
 				while ($link!==NULL)
 				{
-					if (get_class($link)==='foundation_fault')
+					if (get_class($link)==='phocus_fault')
 					{
 						$files[$counter]=$link->get_file();
 						$lines[$counter]=$link->get_line();
@@ -216,7 +216,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not display as string', origin(), $e);
+				throw new phocus_fault('Could not display as string', origin(), $e);
 			} // try
 		} // as_string()
 		//
@@ -332,6 +332,6 @@
 				throw new Exception('Cannot make fault into string', __LINE__, $e);
 			} // try
 		} // __toString()
-	} // foundation_fault
+	} // phocus_fault
 	
 ?>

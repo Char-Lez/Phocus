@@ -1,8 +1,8 @@
 <?php
 	//
-	// foundation_template.php
+	// phocus_template.php
 	//
-	class foundation_template
+	class phocus_template
 	{
 		const APPLICATION='application';
 		const CORE='core';
@@ -13,7 +13,7 @@
 		private $strict;
 		private $token_value;
 		//
-		public function __construct($file_name, $core=foundation_template::APPLICATION)
+		public function __construct($file_name, $core=phocus_template::APPLICATION)
 		{
 			try
 			{
@@ -28,7 +28,7 @@
 				{
 					case 1: {
 						$file_name=func_get_arg(0);
-						$set=foundation_template::APPLICATION;
+						$set=phocus_template::APPLICATION;
 						$sub=application_name().'/';
 					break; }
 					//
@@ -39,7 +39,7 @@
 					break; }
 					//
 					default: {
-						throw new foundation_fault('Invalid argument count', $arg_count);
+						throw new phocus_fault('Invalid argument count', $arg_count);
 					break; }
 				} // switch ($arg_count)
 				//
@@ -57,9 +57,9 @@
 				//////////////////
 				//
 				confirm_path_safe($file_name);
-				if (($set!==foundation_template::APPLICATION) && ($set!==foundation_template::CORE))
+				if (($set!==phocus_template::APPLICATION) && ($set!==phocus_template::CORE))
 				{
-					throw new foundation_fault('Unknown set', $set);
+					throw new phocus_fault('Unknown set', $set);
 				}
 				//
 				//
@@ -83,7 +83,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not make template', origin(), $e);
+				throw new phocus_fault('Could not make template', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -105,7 +105,7 @@
 				//////////////////////
 				//
 				confirm_string($token);
-				confirm_object($snippet, 'foundation_template');
+				confirm_object($snippet, 'phocus_template');
 				//
 				//
 				/////////////////////
@@ -118,7 +118,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add snippet', origin(), $e);
+				throw new phocus_fault('Could not add snippet', origin(), $e);
 			} // try
 		} // add_snippet()
 		//
@@ -140,7 +140,7 @@
 				//////////////////////
 				//
 				confirm_string($token);
-				confirm_object($snippet, 'foundation_template');
+				confirm_object($snippet, 'phocus_template');
 				//
 				//
 				/////////////////////
@@ -153,7 +153,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not append snippet', origin(), $e);
+				throw new phocus_fault('Could not append snippet', origin(), $e);
 			} // try
 		} // append_snippet()
 		//
@@ -178,7 +178,7 @@
 				//
 				if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE) && ($value!==NULL))
 				{
-					throw new foundation_fault('value is not a valid type ['.gettype($value).']', origin());
+					throw new phocus_fault('value is not a valid type ['.gettype($value).']', origin());
 				} // if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE))
 				//
 				//
@@ -198,7 +198,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add token', origin(), $e);
+				throw new phocus_fault('Could not add token', origin(), $e);
 			} // try
 		} // add_token()
 		//
@@ -225,7 +225,7 @@
 				{
 					if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE) && ($value!==NULL))
 					{
-						throw new foundation_fault('value is not a valid type ['.gettype($value).']', origin());
+						throw new phocus_fault('value is not a valid type ['.gettype($value).']', origin());
 					} // if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE))
 					//
 					if ($value===NULL)
@@ -241,7 +241,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add token', origin(), $e);
+				throw new phocus_fault('Could not add token', origin(), $e);
 			} // try
 		} // add_token_array()
 		//
@@ -298,7 +298,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add tokens', origin(), $e);
+				throw new phocus_fault('Could not add tokens', origin(), $e);
 			} // try
 		} // add_token_radio()
 		//
@@ -355,7 +355,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not add tokens', origin(), $e);
+				throw new phocus_fault('Could not add tokens', origin(), $e);
 			} // try
 		} // add_token_select()
 		//
@@ -383,7 +383,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not clear', origin(), $e);
+				throw new phocus_fault('Could not clear', origin(), $e);
 			} // try
 		} // clear ()
 		//
@@ -410,7 +410,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not clear snippets', origin(), $e);
+				throw new phocus_fault('Could not clear snippets', origin(), $e);
 			} // try
 		} // clear_snippets()
 		//
@@ -437,7 +437,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not clear tokens', origin(), $e);
+				throw new phocus_fault('Could not clear tokens', origin(), $e);
 			} // try
 		} // clear_tokens()
 		//
@@ -462,7 +462,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $content', origin(), $e);
+				throw new phocus_fault('Could not get $content', origin(), $e);
 			} // try
 		} // get_content()
 		//
@@ -487,7 +487,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $file_path', origin(), $e);
+				throw new phocus_fault('Could not get $file_path', origin(), $e);
 			} // try
 		} // get_file_path()
 		//
@@ -512,7 +512,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $snippet', origin(), $e);
+				throw new phocus_fault('Could not get $snippet', origin(), $e);
 			} // try
 		} // get_snippet()
 		//
@@ -537,7 +537,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get $token_value', origin(), $e);
+				throw new phocus_fault('Could not get $token_value', origin(), $e);
 			} // try
 		} // get_token_value()
 		//
@@ -595,7 +595,7 @@
 						// Yes, unused tokens
 						$dedupe=array_unique($unused);
 						$display=implode(', ', $dedupe);
-						throw new foundation_fault('Unused token found', $display);
+						throw new phocus_fault('Unused token found', $display);
 					} // if (count($unused)!==0)
 					//
 					$matches=array();
@@ -603,7 +603,7 @@
 					//
 					if ($match_count===FALSE)
 					{
-						throw new foundation_fault('Token match failed', '');
+						throw new phocus_fault('Token match failed', '');
 					} // if ($match_count===FALSE)
 					//
 					if ($match_count!==0)
@@ -612,11 +612,11 @@
 						$display=implode(', ', $dedupe);
 						if ($match_count===1)
 						{
-							throw new foundation_fault('Unresolved token found', $display);
+							throw new phocus_fault('Unresolved token found', $display);
 						}
 						else
 						{
-							throw new foundation_fault('Unresolved tokens found', $display);
+							throw new phocus_fault('Unresolved tokens found', $display);
 						} // if ($match_count===1)
 					} // if ($match_count!==0)
 				}
@@ -639,7 +639,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not render template', origin(), $e);
+				throw new phocus_fault('Could not render template', origin(), $e);
 			} // try
 		} // render()
 		//
@@ -663,7 +663,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not do substitutions', origin(), $e);
+				throw new phocus_fault('Could not do substitutions', origin(), $e);
 			} // try
 		} // render_substitutions()
 		*/

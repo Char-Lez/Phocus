@@ -2,7 +2,7 @@
 	//
 	// database.php
 	//
-	class foundation_database
+	class phocus_database
 	{
 		private $connection;
 		private $db;
@@ -39,20 +39,20 @@
 				$this->connection=@mysqli_connect($host, $user, $password);
 				if ($this->connection===FALSE)
 				{
-					throw new foundation_fault('Could not connect to database', @mysqli_connect_error().' err:'.@mysqli_connect_errno());
+					throw new phocus_fault('Could not connect to database', @mysqli_connect_error().' err:'.@mysqli_connect_errno());
 				} // if ($this->connection===FALSE)
 				//
 				$this->db=@mysqli_select_db($this->connection, $name);
 				if ($this->db===FALSE)
 				{
-					throw new foundation_fault('Could not select database', @mysqli_error());
+					throw new phocus_fault('Could not select database', @mysqli_error());
 				} // if ($this->db===FALSE)
 				//
 				return;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not create database', origin(), $e);
+				throw new phocus_fault('Could not create database', origin(), $e);
 			} // try
 		} // __construct()
 		//
@@ -73,14 +73,14 @@
 				//
 				if ($close===FALSE)
 				{
-					throw new foundation_fault('Close failed', mysqli_error($this->connection));
+					throw new phocus_fault('Close failed', mysqli_error($this->connection));
 				} // if ($close===FALSE)
 				//
 				return;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not close database', origin(), $e);
+				throw new phocus_fault('Could not close database', origin(), $e);
 			} //try
 		} // close()
 		//
@@ -107,7 +107,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not get row', origin(), $e);
+				throw new phocus_fault('Could not get row', origin(), $e);
 			} // try
 		} // fetch()
 		//
@@ -132,7 +132,7 @@
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not count rows', origin(), $e);
+				throw new phocus_fault('Could not count rows', origin(), $e);
 			} // try
 		} // row_count()
 		//
@@ -159,7 +159,7 @@
 					break; }
 					//
 					default: {
-						throw new foundation_fault("Invalid args [$arg_count]", origin());
+						throw new phocus_fault("Invalid args [$arg_count]", origin());
 					break; }
 				} // switch ($arg_count)
 				//
@@ -176,7 +176,7 @@
 				{
 					if ((is_string($value)===FALSE) && (is_numeric($value)===FALSE))
 					{
-						throw new foundation_fault("Invalid value type [$id]=>[".gettype($value).']', origin());
+						throw new phocus_fault("Invalid value type [$id]=>[".gettype($value).']', origin());
 					} // ((is_string($value)===FALSE) && (is_numeric($value)===FALSE))
 				} // foreach ($tokens as $id=>$value)
 				//
@@ -198,15 +198,15 @@
 				$this->select=@mysqli_query($this->connection, $this->SQL);
 				if ($this->select===FALSE)
 				{
-					throw new foundation_fault ('Could not do query', $this->SQL);
+					throw new phocus_fault ('Could not do query', $this->SQL);
 				} // if ($this->select===FALSE)
 				//
 				return;
 			}
 			catch (Throwable $e)
 			{
-				throw new foundation_fault('Could not query database', origin(), $e);
+				throw new phocus_fault('Could not query database', origin(), $e);
 			} // try
 		} // query()
-	} // foundation_database
+	} // phocus_database
 ?>
