@@ -1,4 +1,4 @@
-<!--foundation_smtp_test_success.tem-->
+<!--phocus_smtp_test_success.tem-->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -7,18 +7,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="security" content="D417680A40DB39454E947F78337AA549">
 		<link rel="stylesheet" type="text/css" href="./css/_library/bootstrap.min.css">
-		<title>Foundation - SMTP Test</title>
+		<title>Phocus - SMTP Test</title>
 	</head>
 	<body>
 		<br>
 		<center>
-			<img src="./images/_core/logo.png" style="height:200px;" alt="Foundation Logo">
+			<img src="./images/_core/logo.png" style="height:200px;" alt="Phocus Logo">
 		</center>
 		<div id="myForm" class="container">
 			<div class="row">
 				<div class="col-sm-12">
 				  <center>
-						<h2>FOUNDATION SMTP TEST</h2>
+						<h2>PHOCUS SMTP TEST</h2>
 				  </center>
 				</div>
 			</div>
@@ -28,7 +28,7 @@
 				<div class="col-sm-6">
 					<font size='+4' style='color: green;'>SUCCESS!</font><br>
 					<br>
-					Foundation was able to:<br>
+					Phocus was able to:<br>
 					&nbsp;&nbsp;&nbsp;- Connect to the SMTP service<br>
 					&nbsp;&nbsp;&nbsp;- Send an email<br>
 					<br>
@@ -42,4 +42,4 @@
 		<script src="./js/_library/bootstrap.min.js"></script>
 	</body>
 </html>
-<!--foundation_smtp_test_success.tem-->
+<!--phocus_smtp_test_success.tem-->

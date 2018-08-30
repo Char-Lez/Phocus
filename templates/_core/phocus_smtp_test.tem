@@ -1,4 +1,4 @@
-<!--foundation_smtp_test.tem-->
+<!--phocus_smtp_test.tem-->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -12,13 +12,13 @@
 	<body>
 		<br>
 		<center>
-			<img src="./images/_core/logo.png" style="height:200px;" alt="Foundation Logo">
+			<img src="./images/_core/logo.png" style="height:200px;" alt="Phocus Logo">
 		</center>
 		<div id="myForm" class="container">
 			<div class="row">
 				<div class="col-sm-12">
 				  <center>
-						<h2>FOUNDATION SMTP TEST</h2>
+						<h2>PHOCUS SMTP TEST</h2>
 				  </center>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 					Use this simple form to send a test email to yourself.  The content of the email
 					is already set and cannot be changed from this form. Emails will ONLY be sent to address on this domain.<br>
 					<br>
-					<form action='./#FOUNDATION_APPICATION_CLASS#' method='post' style='background-color: #DDDDDD; padding:20px; border-radius: 25px;'>
+					<form action='./#PHOCUS_APPICATION_CLASS#' method='post' style='background-color: #DDDDDD; padding:20px; border-radius: 25px;'>
 						<input type='hidden' name='command' value='SMTP_SEND_EMAIL'>
 						#EMAIL#
 						<br>
@@ -106,4 +106,4 @@
 		</script>
 	</body>
 </html>
-<!--foundation_smtp_test.tem-->
+<!--phocus_smtp_test.tem-->

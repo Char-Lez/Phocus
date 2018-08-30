@@ -57,12 +57,6 @@
 					break; }
 					//
 					default: {
-if ($class_name==='fault')
-{
-print "<pre>";
-print_r (debug_backtrace());
-print "</pre>";
-}
 						$sub='';
 					break; }
 				} // switch ($class_name)

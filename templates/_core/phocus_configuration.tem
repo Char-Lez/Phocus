@@ -1,4 +1,4 @@
-<!--foundation_configuration.tem-->
+<!--phocus_configuration.tem-->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -7,18 +7,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="security" content="D417680A40DB39454E947F78337AA549">
 		<link rel="stylesheet" type="text/css" href="./css/_library/bootstrap.min.css">
-		<title>Foundation - Configuration</title>
+		<title>Phocus - Configuration</title>
 	</head>
 	<body>
 		<br>
 		<center>
-			<img src="./images/_core/logo.png" style="height:200px;" alt="Foundation Logo">
+			<img src="./images/_core/logo.png" style="height:200px;" alt="Phocus Logo">
 		</center>
 		<div id="myForm" class="container">
 			<div class="row">
 				<div class="col-sm-12">
 				  <center>
-						<h2>FOUNDATION APPLICATION CONFIGURATION</h2>
+						<h2>PHOCUS APPLICATION CONFIGURATION</h2>
 				  </center>
 				</div>
 			</div>
@@ -26,12 +26,12 @@
 				<div class="col-sm-3">
 				</div>
 				<div class="col-sm-6">
-					It looks like you've installed a new foundation application.  You can use this configuration utility to get things
+					It looks like you've installed a new Phocus application.  You can use this configuration utility to get things
 					going quickly and smoothly.  Simply fill in the values you need, and click "Save Configuration" at the bottom.  You
 					can change these values at any time.  If you don't intend to use some of the features, simply leave those values
 					blank.
 					<br>
-					<form action='./#FOUNDATION_APPICATION_CLASS#' method='post'>
+					<form action='./#PHOCUS_APPICATION_CLASS#' method='post'>
 						<input type='hidden' name='command' value='SAVE'>
 						
 						
@@ -147,4 +147,4 @@
 		<script src="./js/_library/bootstrap.min.js"></script>
 	</body>
 </html>
-<!--foundation_configuration.tem-->
+<!--phocus_configuration.tem-->
