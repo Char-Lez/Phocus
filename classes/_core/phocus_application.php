@@ -1,6 +1,6 @@
 <?php
 	//
-	// phocus_application.php
+	// phocus_application.php 
 	//
 	class phocus_application
 	{
