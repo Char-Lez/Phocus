@@ -162,7 +162,7 @@
 					$main->add_token('SMTP_TEST', '');
 				} // if [Database settings are present]
 				//
-				$main->add_token('phocus_APPICATION_CLASS', application_name().'.php');
+				$main->add_token('PHOCUS_APPICATION_CLASS', application_name().'.php');
 				$main->add_token('SHOW_DEBUG_TRUE', $show_debug_true);
 				$main->add_token('SHOW_DEBUG_FALSE', $show_debug_false);
 				$main->add_token('STRICT_TRUE', $strict_true);
@@ -732,7 +732,7 @@
 				$email->add_token('SMTP_FROM_ADDRESS', $this->ini->get_ini('SMTP_from_address'));
 				$email->add_token('SMTP_FROM_NAME', $this->ini->get_ini('SMTP_from_name'));
 				//
-				$main->add_token('phocus_APPICATION_CLASS', application_name().'.php');
+				$main->add_token('PHOCUS_APPICATION_CLASS', application_name().'.php');
 				$main->add_snippet('EMAIL', $email);
 				$main->add_token('DOMAIN', $_SERVER['HTTP_HOST']);
 				//
