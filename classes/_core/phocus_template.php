@@ -6,6 +6,8 @@
 	{
 		const APPLICATION='application';
 		const CORE='core';
+		const STRICT='strict';
+		const LOOSE='loose';
 		//
 		private $content;
 		private $file_path;
@@ -13,17 +15,18 @@
 		private $strict;
 		private $token_value;
 		//
-		public function __construct($file_name, $core=phocus_template::APPLICATION)
+		public function __construct($file_name, $set=phocus_template::APPLICATION, $check=phocus_template::STRICT)
 		{
 			try
 			{
-				global $ini;
-				//
+			  global $application_name;
+			  //
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
+				/*
 				switch ($arg_count)
 				{
 					case 1: {
@@ -35,13 +38,23 @@
 					case 2: {
 						$file_name=func_get_arg(0);
 						$set=func_get_arg(1);
-						$sub='_core/';
+					break; }
+					//
+					case 3: {
+						$file_name=func_get_arg(0);
+						$set=func_get_arg(1);
+						$strict=func_get_arg(2);
 					break; }
 					//
 					default: {
 						throw new phocus_fault('Invalid argument count', $arg_count);
 					break; }
 				} // switch ($arg_count)
+				*/
+				if (($arg_count<1) || ($arg_count>3))
+				{
+					throw new phocus_fault('Invalid argument count', $arg_count);
+				}
 				//
 				//
 				//////////////////////
@@ -50,6 +63,7 @@
 				//
 				confirm_string($file_name);
 				confirm_string($set);
+				confirm_string($check);
 				//
 				//
 				//////////////////
@@ -61,6 +75,21 @@
 				{
 					throw new phocus_fault('Unknown set', $set);
 				}
+				if (($check!==phocus_template::STRICT) && ($check!==phocus_template::LOOSE))
+				{
+					throw new phocus_fault('Unknown check', $check);
+				}
+				//
+				//
+				// Determine subdirectoy based on set
+				if ($set===phocus_template::CORE)
+				{
+				  $sub='_core/';
+				}
+				else
+				{
+				  $sub=$application_name.'/';
+				} // if ($set===phocus_template::CORE)
 				//
 				//
 				///////////////////////
@@ -77,7 +106,7 @@
 				//
 				$this->token_value=array();
 				$this->snippet=array();
-				$this->strict=$ini->get_ini('strict');
+				$this->strict=$check;
 				//
 				return;
 			}

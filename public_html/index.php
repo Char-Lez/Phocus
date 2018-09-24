@@ -42,11 +42,11 @@
 				//
 				switch ($class_name)
 				{
-					case 'phocus_application': 
-					case 'phocus_database': 
-					case 'phocus_ini': 
-					case 'phocus_fault': 
-					case 'phocus_template': 
+					case 'phocus_application':
+					case 'phocus_database':
+					case 'phocus_ini':
+					case 'phocus_fault':
+					case 'phocus_template':
 					case 'phocus_system': {
 						$sub='_core/';
 					break; }
@@ -247,16 +247,16 @@
 						<meta http-equiv="X-UA-Compatible" content="IE=edge">
 						<meta name="viewport" content="width=device-width, initial-scale=1">
 						<meta name="security" content="D417680A40DB39454E947F78337AA549">
-						<title>Foundation - Technical Problem</title>
+						<title>Phocus - Technical Problem</title>
 					</head>
 					<body>
 						<br>
 						<center>
-							<img src="./images/_core/logo.png" style="height:200px;" alt="Foundation Logo">
+							<img src="./images/_core/logo.png" style="height:200px;" alt="Phocus Logo">
 							<br>
 							<br>
 							<br>
-							This Foundation application is experiencing a technical problem.
+							This Phocus application is experiencing a technical problem.
 							<br>
 							<br>
 							Please try back soon.
@@ -380,7 +380,7 @@
 				/////////////////////////////////////////////
 				// Determine if get has the target element //
 				/////////////////////////////////////////////
-				// 
+				//
 				if (array_key_exists($target, $_GET)!==TRUE)
 				{
 					throw new phocus_fault("\$_GET is missing [$target]", origin());
@@ -473,7 +473,7 @@
 				///////////////////////////////////////////////
 				// Determine if array has the target element //
 				///////////////////////////////////////////////
-				// 
+				//
 				if (array_key_exists($needle, $haystack)!==TRUE)
 				{
 					throw new phocus_fault("array element missing [$needle]", origin());
@@ -517,7 +517,7 @@
 				////////////////////////////////////////////////
 				// Determine if $_POST has the target element //
 				////////////////////////////////////////////////
-				// 
+				//
 				if (array_key_exists($target, $_POST)!==TRUE)
 				{
 					throw new phocus_fault("\$_POST is missing [$target]", origin());
@@ -1114,7 +1114,7 @@
 		/**
 		* <h1>Do Base 64 Decode</h1>
 		* Decodes a string in base64 and deals with errors
-		* 
+		*
 		* @param encoded [string]
 		* @return string
 		*/
@@ -1304,7 +1304,7 @@
 				// Determine the origin //
 				//////////////////////////
 				//
-				$backtrace=debug_backtrace();			
+				$backtrace=debug_backtrace();
 				//
 				if (is_array($backtrace)!==TRUE)
 				{
@@ -1774,7 +1774,7 @@
 				// Read the file //
 				///////////////////
 				//
-				$data=file_get_contents($path);
+				$data=@file_get_contents($path);
 				// Did the file read?
 				if ($data===FALSE)
 				{
@@ -1980,7 +1980,7 @@
 				//
 				//
 				//
-				$backtrace=debug_backtrace();			
+				$backtrace=debug_backtrace();
 				//
 				if (is_array($backtrace)!==TRUE)
 				{
