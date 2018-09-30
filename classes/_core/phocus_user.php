@@ -38,7 +38,7 @@
 				//////////////////////////////
 				//
         $SQL="SELECT count(*) FROM `account` WHERE uuid='#1#';";
-        query($SQL, $id);
+        query($SQL, $user_id);
         //
         // Was exactly one ID found?
         if (row_count()===1)
@@ -54,7 +54,7 @@
         //
         return $result;
       }
-      catch (Throwable e)
+      catch (Throwable $e)
       {
         throw new phocus_fault('Could not determine if user exists', '', $e);
       } // try
