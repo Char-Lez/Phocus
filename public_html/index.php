@@ -47,7 +47,8 @@
 					case 'phocus_ini':
 					case 'phocus_fault':
 					case 'phocus_template':
-					case 'phocus_system': {
+					case 'phocus_system': 
+					case 'phocus_user': {
 						$sub='_core/';
 					break; }
 					//
