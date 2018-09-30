@@ -353,6 +353,54 @@
 		//
 		//
 		/**
+		* <h1>Confirm an element exists in $_COOKIE</h1>
+		*
+		* @param $target [string]
+		*/
+		function confirm_cookie_element($target)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				if ($arg_count!==1)
+				{
+					throw new phocus_fault("Invalid args [$arg_count]", origin());
+				} // if ($arg_count!==1)
+				//
+				//
+				///////////////////////
+				// CONFIRM DATA TYPE //
+				///////////////////////
+				//
+				if (is_string($target)!==TRUE)
+				{
+					throw new phocus_fault('Invalid target type ['.gettype($target).']', origin());
+				}
+				//
+				//
+				/////////////////////////////////////////////
+				// Determine if get has the target element //
+				/////////////////////////////////////////////
+				//
+				if (array_key_exists($target, $_COOKIE)!==TRUE)
+				{
+					throw new phocus_fault("\$_COOKIE is missing [$target]", origin());
+				} // if (array_key_exists($target, $_COOKIE)!==TRUE)
+				//
+				return $_COOKIE[$target];
+			}
+			catch (Throwable $e)
+			{
+				throw new phocus_fault('COOKIE does not have required data', origin(), $e);
+			} // try
+		} // confirm_cookie_element()
+		//
+		//
+		/**
 		* <h1>Confirm an element exists in $_GET</h1>
 		*
 		* @param $target [string]
