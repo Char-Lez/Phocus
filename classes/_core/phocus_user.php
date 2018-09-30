@@ -1,6 +1,6 @@
-<?php phocus_user.php
+<?php
   //
-  //
+  // phocus_user.php
   //
   class phocus_user
   {
