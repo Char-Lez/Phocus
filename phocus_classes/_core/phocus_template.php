@@ -96,7 +96,7 @@
 				// Load the template //
 				///////////////////////
 				//
-				$this->file_path='../templates/'.$sub.$file_name;
+				$this->file_path='../phocus_templates/'.$sub.$file_name;
 				$this->content=file_read($this->file_path);
 				//
 				//
