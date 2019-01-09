@@ -1,0 +1,45 @@
+<!--phocus_smtp_test_success.tem-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="security" content="D417680A40DB39454E947F78337AA549">
+		<link rel="stylesheet" type="text/css" href="./css/_library/bootstrap.min.css">
+		<title>Phocus - SMTP Test</title>
+	</head>
+	<body>
+		<br>
+		<center>
+			<img src="./images/_core/logo.png" style="height:200px;" alt="Phocus Logo">
+		</center>
+		<div id="myForm" class="container">
+			<div class="row">
+				<div class="col-sm-12">
+				  <center>
+						<h2>PHOCUS SMTP TEST</h2>
+				  </center>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">
+				</div>
+				<div class="col-sm-6">
+					<font size='+4' style='color: green;'>SUCCESS!</font><br>
+					<br>
+					Phocus was able to:<br>
+					&nbsp;&nbsp;&nbsp;- Connect to the SMTP service<br>
+					&nbsp;&nbsp;&nbsp;- Send an email<br>
+					<br>
+					<b>YOU NEED TO CONFIRM THE EMAIL WAS RECEIVED</b><br>
+				</div>
+				<div class="col-sm-3">
+				</div>
+			</div>
+		</div>			
+		<script src="./js/_library/jquery-3.2.1.min.js"></script>
+		<script src="./js/_library/bootstrap.min.js"></script>
+	</body>
+</html>
+<!--phocus_smtp_test_success.tem-->
