@@ -62,7 +62,7 @@
 					break; }
 				} // switch ($class_name)
 				//
-				$target_file='../classes/'.$sub.$class_name.'.php';
+				$target_file='../phocus_classes/'.$sub.$class_name.'.php';
 				$include=@include($target_file);
 				if ($include===FALSE)
 				{
