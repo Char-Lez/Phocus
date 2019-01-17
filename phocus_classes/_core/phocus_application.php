@@ -84,8 +84,8 @@
 		{
 			try
 			{
-			  global $application_name;
-			  //
+				global $application_name;
+				//
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -103,88 +103,88 @@
 				// Is there an access_token existing for this application/user?
 				if (array_key_exists($application_name, $_COOKIE))
 				{
-				  // Yes, an access_token exists
-				  //
-				  // Is it in the database?
-				  $SQL="SELECT user_id FROM `access_session` WHERE access_token='#1#' AND application='#2#';";
-				  $access_token=query_one($SQL, $_COOKIE[$application_name], $application_name);
-				  if ($access_token===FALSE)
-				  {
-				    // No, not in the database
-				    //
-				    // Do nothimg more here
-				  }
-				  else
-				  {
-				    // Yes, in the database
-				    //
-				    $this->user_id=$access_token['user_id'];
-				    $authenticate=TRUE;
-				  } // if ($access_token===FALSE)
+					// Yes, an access_token exists
+					//
+					// Is it in the database?
+					$SQL="SELECT user_id FROM `access_session` WHERE access_token='#1#' AND application='#2#';";
+					$access_token=query_one($SQL, $_COOKIE[$application_name], $application_name);
+					if ($access_token===FALSE)
+					{
+						// No, not in the database
+						//
+						// Do nothimg more here
+					}
+					else
+					{
+						// Yes, in the database
+						//
+						$this->user_id=$access_token['user_id'];
+						$authenticate=TRUE;
+					} // if ($access_token===FALSE)
 				}
 				else
 				{
-				  // No, an access_token does not exist
-				  //
-				  // Do nothing more here
+					// No, an access_token does not exist
+					//
+					// Do nothing more here
 				} // if (array_key_exists('access_token', $_COOKIE))
 				//
 				// Have we authenticated?
 				if ($authenticate!==TRUE)
 				{
-				  // No, we have not, proceed with other authentication steps
-				  //
-          // Does ID exist in $_POST?
-          if (array_key_exists('ID', $_POST)!==TRUE)
-          {
-            // No, ID is missing
-            // Does PASSWORD exist in $_POST?
-            if (array_key_exists('PASSWORD', $_POST)!==TRUE)
-            {
-              // No, PASSWORD is missing
-              // We will assume this is a new authentication request
-              $message='';
-            }
-            else
-            {
-              // Yes, PASSWORD is present
-              $message='MISSING ID';
-            } // if (array_key_exists('PASSWORD', $_POST)!==TRUE)
-          }
-          else
-          {
-            // ID exists
-            //
-            // Does PASSWORD exist in $_POST?
-            if (array_key_exists('PASSWORD', $_POST)!==TRUE)
-            {
-              // No, PASSWORD is missing
-              $message='Need password';
-            }
-            else
-            {
-              // Yes, PASSWORD is present
-              //
-              $message='Invalid Password';
-              //
-              $ID=strtoupper($_POST['ID']);
-              $authenticate=$this->authenticate_id_password($ID, $_POST['PASSWORD']);
-              //
-              // Did it authenticate?
-              if ($authenticate===TRUE)
-              {
-                // Yes, authenticated
-                //
-                $this->user_id=$ID;
-              }
-              else
-              {
-                // No, did not authenticate
-                //
-                // Do nothing more
-              } // if ($authenticate===TRUE)
-            } // if (array_key_exists('PASSWORD', $_POST)!==TRUE)
-          } // if (array_key_exists('ID', $_POST)!==TRUE)
+					// No, we have not, proceed with other authentication steps
+					//
+          				// Does ID exist in $_POST?
+          				if (array_key_exists('ID', $_POST)!==TRUE)
+          				{
+           					// No, ID is missing
+          					// Does PASSWORD exist in $_POST?
+            					if (array_key_exists('PASSWORD', $_POST)!==TRUE)
+            					{
+            						// No, PASSWORD is missing
+            						// We will assume this is a new authentication request
+            						$message='';
+            					}
+            					else
+            					{
+            						// Yes, PASSWORD is present
+            						$message='MISSING ID';
+            					} // if (array_key_exists('PASSWORD', $_POST)!==TRUE)
+          				}
+          				else
+          				{
+          					// ID exists
+          					//
+          					// Does PASSWORD exist in $_POST?
+          					if (array_key_exists('PASSWORD', $_POST)!==TRUE)
+          					{
+          						// No, PASSWORD is missing
+           						$message='Need password';
+            					}
+            					else
+            					{
+         						// Yes, PASSWORD is present
+        						//
+        						$message='Invalid Password';
+        						//
+       							$ID=strtoupper($_POST['ID']);
+       							$authenticate=$this->authenticate_id_password($ID, $_POST['PASSWORD']);
+       							//
+       							// Did it authenticate?
+      							if ($authenticate===TRUE)
+      							{
+      								// Yes, authenticated
+       								//
+       								$this->user_id=$ID;
+       							}
+       							else
+       							{
+       								// No, did not authenticate
+       								//
+       								// Do nothing more
+       							} // if ($authenticate===TRUE)
+       						} // if (array_key_exists('PASSWORD', $_POST)!==TRUE)
+      					} // if (array_key_exists('ID', $_POST)!==TRUE)
 				} // if ($authenticate!==TRUE)
 				//
 				// Did user authenticate?
@@ -198,9 +198,9 @@
 				{
 					// Yes, authenticated
 					//
-          // Delete all existing access_tokens for this ID
-          $SQL="DELETE from `access_session` WHERE user_id='#1#' AND application='#2#';";
-          query($SQL, $this->user_id, $application_name);
+					// Delete all existing access_tokens for this ID
+					$SQL="DELETE from `access_session` WHERE user_id='#1#' AND application='#2#';";
+					query($SQL, $this->user_id, $application_name);
 					//
 					// Create a new access token
 					$access_token=random_bytes(64);
@@ -295,9 +295,9 @@
 				//
 				// Are database settings present?
 				if (($this->ini->get_ini('database_host')!=='') &&
-						($this->ini->get_ini('database_user')!=='') &&
-						($this->ini->get_ini('database_password')!=='') &&
-						($this->ini->get_ini('database_name')!==''))
+					($this->ini->get_ini('database_user')!=='') &&
+					($this->ini->get_ini('database_password')!=='') &&
+					($this->ini->get_ini('database_name')!==''))
 				{
 					// Yes, present
 					$database_test=new phocus_template('phocus_configuration_database_test.snip', phocus_template::CORE);
@@ -325,10 +325,10 @@
 				//
 				// Are smtp settings present?
 				if (($this->ini->get_ini('SMTP_host')!=='') &&
-						($this->ini->get_ini('SMTP_user')!=='') &&
-						($this->ini->get_ini('SMTP_password')!=='') &&
-						($this->ini->get_ini('SMTP_from_address')!=='') &&
-						($this->ini->get_ini('SMTP_from_name')!==''))
+					($this->ini->get_ini('SMTP_user')!=='') &&
+					($this->ini->get_ini('SMTP_password')!=='') &&
+					($this->ini->get_ini('SMTP_from_address')!=='') &&
+					($this->ini->get_ini('SMTP_from_name')!==''))
 				{
 					// Yes, present
 					$smtp_test=new phocus_template('phocus_configuration_smtp_test.snip', phocus_template::CORE);
@@ -448,10 +448,10 @@
 		//
 		protected function login()
 		{
-		  try
-		  {
-        global $application_name;
-        //
+			try
+			{
+        			global $application_name;
+       				//
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -465,20 +465,20 @@
 				$result=$main->render();
 				//
 				return $result;
-		  }
+			}
 			catch (Throwable $e)
 			{
 				throw new phocus_fault('Could not display login', origin(), $e);
-		  } // try
+		  	} // try
 		} // login()
 		//
 		//
 		public function logout()
 		{
-		  try
-		  {
-		    global $application_name;
-		    //
+			try
+			{
+				global $application_name;
+		    		//
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -516,11 +516,11 @@
 				  // No access_token
 				  throw new phocus_fault('Cannot logout', 'No access token');
 				} // if (array_key_exists($application_name, $_COOKIE))
-		  }
+		  	}
 			catch (Throwable $e)
 			{
 				throw new phocus_fault('Cannotlogout', origin(), $e);
-		  } // try
+			} // try
 		} // logout()
 		//
 		//
@@ -560,8 +560,8 @@
 		//
 		protected function permission_set()
 		{
-		  try
-		  {
+			try
+			{
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -577,11 +577,11 @@
 				$this->permission_add(phocus_application::UNIVERSAL_PERMISSION);
 				//
 				return;
-		  }
-		  catch (Throwable $e)
-		  {
+			}
+			catch (Throwable $e)
+			{
 				throw new phocus_fault('Could not set permissions', $permission, $e);
-		  } // try
+			} // try
 		} // permissions_set()
 		//
 		//
@@ -627,86 +627,76 @@
 				// Render the application //
 				////////////////////////////
 				//
-				// Do we require authentication?
-				if ($this->require_authentication()!==FALSE)
+				$this->permission_set();
+				//
+				// Is there a declared command?
+				if ($command!=='')
 				{
-				  // Yes, require authentiction
-					$authenticated=$this->authenticate();
+					// Yes, declared command
+					// Do nothing more
 				}
 				else
 				{
-				  // No, so assume we're authenticated
-					$authenticated=TRUE;
-				} // if ($this->require_authentication()!==FALSE)
-				//
-				// Did it autheticate?
-				if ($authenticated!==TRUE)
-				{
-					// No, did not authenticate
-					//
-					$response=$this->login();
-				} //
-				else
-				{
-					// Yes, authenticated
-					//
-					$this->permission_set();
-					//
-					// Is there a declared command?
-					if ($command!=='')
+					// No, no command declared
+					// Is there a POST command?
+					if (array_key_exists('command', $_POST)===TRUE)
 					{
-						// Yes, declared command
-						// Do nothing more
+						// Yes, has POST command
+						$command=$_POST['command'];
 					}
 					else
 					{
-						// No, no command declared
-						// Is there a POST command?
-						if (array_key_exists('command', $_POST)===TRUE)
+						// No, missing POST command
+						// Is there a GET command?
+						if (array_key_exists('command', $_GET)===TRUE)
 						{
-							// Yes, has POST command
-							$command=$_POST['command'];
+							// Yes, has GET command
+							$command=$_GET['command'];
 						}
 						else
 						{
-							// No, missing POST command
-							// Is there a GET command?
-							if (array_key_exists('command', $_GET)===TRUE)
+							// No, missing GET command
+							// Is there a COOKIE command?
+							if (array_key_exists('command', $_COOKIE)===TRUE)
 							{
-								// Yes, has GET command
-								$command=$_GET['command'];
+								// Yes, has a COOKIE command
+								$command=$_COOKIE['command'];
 							}
 							else
 							{
-								// No, missing GET command
-								// Is there a COOKIE command?
-								if (array_key_exists('command', $_COOKIE)===TRUE)
+								// No, missing COOKIE command
+								// Try to get default_command
+								$default_command=$ini->get_ini('defaut_command', phocus_ini::INI_OPTIONAL);
+								// Is there a default command?
+								if (is_null($default_command)===TRUE)
 								{
-									// Yes, has a COOKIE command
-									$command=$_COOKIE['command'];
+									// No, default_command is not defined
+									//
+									// Use the Phocus default
+									$command='DISPLAY';
 								}
 								else
 								{
-									// No, missing COOKIE command
-									// Go with default command
-									$command='DISPLAY';
-								} // if (array_key_exists('command', $_COOKIE)===TRUE)
-							} // if (array_key_exists('command', $_GET)===TRUE)
-						} // if (array_key_exists('command', $_POST)===TRUE)
-					} // if ($command!=='')
-					//
-					// Does the command exist?
-					if (method_exists($this, $command)!==TRUE)
-					{
-						// No, command is missing
-						throw new phocus_fault('Invalid command', $command);
-					}
-					else
-					{
-						// Yes, command exists
-						$response=$this->$command();
-					} // if (method_exists($application, $command)!==TRUE)
-				} // if ($authenticated!==TRUE)
+									// Yes, default_command is defined
+									//
+									$command=$default_command;
+								} // if (is_null($default_command)===TRUE)
+							} // if (array_key_exists('command', $_COOKIE)===TRUE)
+						} // if (array_key_exists('command', $_GET)===TRUE)
+					} // if (array_key_exists('command', $_POST)===TRUE)
+				} // if ($command!=='')
+				//
+				// Does the command exist?
+				if (method_exists($this, $command)!==TRUE)
+				{
+					// No, command is missing
+					throw new phocus_fault('Invalid command', $command);
+				}
+				else
+				{
+					// Yes, command exists
+					$response=$this->$command();
+				} // if (method_exists($application, $command)!==TRUE)
 				//
 				return $response;
 			}
@@ -911,8 +901,8 @@
 		//
 		protected function user_id()
 		{
-		  try
-		  {
+			try
+			{
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
@@ -942,11 +932,11 @@
 				$result=$this->user_id;
 				//
 				return $result;
-		  }
-		  catch (Throwable $e)
-		  {
+			}
+			catch (Throwable $e)
+			{
 				throw new phocus_fault('Cannot access user_id', origin(), $e);
-		  } // try
+			} // try
 		} // user_id()
 	} // phocus_install
 ?>
