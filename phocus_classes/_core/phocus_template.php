@@ -4,16 +4,22 @@
 	//
 	class phocus_template
 	{
+		const ALL='all';
 		const APPLICATION='application';
 		const CORE='core';
 		const STRICT='strict';
 		const PERMISSIVE='permissive';
+		const SPECIFIC='specific';
+		const UNIVERSAL='universal';
 		//
 		private $content;
 		private $file_path;
-		private $snippet;
 		private $mode;
+		private $snippet;
 		private $token_value;
+		//
+		private static $universal_snippet=array();
+		private static $universal_token_value=array();
 		//
 		public function __construct($file_name, $set=phocus_template::APPLICATION, $mode=phocus_template::STRICT)
 		{
@@ -100,7 +106,7 @@
 		} // __construct()
 		//
 		//
-		public function add_snippet($token, $snippet)
+		public function add_snippet($token, $snippet, $collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -109,7 +115,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 2);
+				confirm_args($arg_count, 3);
 				//
 				//
 				//////////////////////
@@ -118,13 +124,39 @@
 				//
 				confirm_string($token);
 				confirm_object($snippet, 'phocus_template');
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
 				//
 				//
 				/////////////////////
 				// Add the snippet //
 				/////////////////////
 				//
-				$this->snippet[$token]=$snippet->render();
+				switch ($collection)
+				{
+					case 'specific': {
+						$this->snippet[$token]=$snippet->render();
+					break; }
+					//
+					case 'universal': {
+						$this->universal_snippet[$token]=$snippet->render();
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 				//
 				return;
 			}
@@ -135,7 +167,7 @@
 		} // add_snippet()
 		//
 		//
-		public function append_snippet($token, $snippet)
+		public function append_snippet($token, $snippet, $collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -144,7 +176,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 2);
+				confirm_args($arg_count, 3);
 				//
 				//
 				//////////////////////
@@ -153,13 +185,39 @@
 				//
 				confirm_string($token);
 				confirm_object($snippet, 'phocus_template');
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
 				//
 				//
 				/////////////////////
 				// Add the snippet //
 				/////////////////////
 				//
-				$this->snippet[$token].=$snippet->render();
+				switch ($collection)
+				{
+					case 'specific': {
+						$this->snippet[$token].=$snippet->render();
+					break; }
+					//
+					case 'universal': {
+						$this->universal_snippet[$token].=$snippet->render();
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 				//
 				return;
 			}
@@ -170,7 +228,7 @@
 		} // append_snippet()
 		//
 		//
-		public function add_token($token, $value)
+		public function add_token($token, $value, $collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -179,7 +237,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 2);
+				confirm_args($arg_count, 3);
 				//
 				//
 				//////////////////////
@@ -187,15 +245,22 @@
 				//////////////////////
 				//
 				confirm_string($token);
+				confirm_mixed($value, 'NDIS');
+				confirm_string($collection);
 				//
-				if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE) && ($value!==NULL))
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
 				{
-					throw new phocus_fault('value is not a valid type ['.gettype($value).']', origin());
-				} // if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE))
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
 				//
 				//
 				///////////////////
-				// Add the token //
+				// Normalization //
 				///////////////////
 				//
 				if ($value===NULL)
@@ -203,7 +268,26 @@
 					$value='';
 				}
 				//
-				$this->token_value[$token]=$value;
+				///////////////////
+				// Add the token //
+				///////////////////
+				//
+				switch ($collection)
+				{
+					case 'specific': {
+						$this->token_value[$token]=$value;
+					break; }
+					//
+					case 'universal': {
+						$this->universal_token_value[$token]=$value;
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 				//
 				//
 				return;
@@ -215,7 +299,7 @@
 		} // add_token()
 		//
 		//
-		public function add_token_array($token_values)
+		public function add_token_array($token_values, $collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -224,7 +308,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 1);
+				confirm_args($arg_count, 2);
 				//
 				//
 				//////////////////////
@@ -232,20 +316,48 @@
 				//////////////////////
 				//
 				confirm_array($token_values);
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				//
+				//
+				////////////////////
+				// Add the tokens //
+				////////////////////
 				//
 				foreach ($token_values as $token=>$value)
 				{
-					if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE) && ($value!==NULL))
-					{
-						throw new phocus_fault('value is not a valid type ['.gettype($value).']', origin());
-					} // if ((is_numeric($value)===FALSE) && (is_string($value)===FALSE))
+					confirm_mixed($value, 'NDIS');
 					//
 					if ($value===NULL)
 					{
 						$value='';
 					}
 					//
-					$this->token_value[$token]=$value;
+					switch ($collection)
+					{
+						case 'specific': {
+							$this->token_value[$token]=$value;
+						break; }
+						//
+						case 'universal': {
+							$this->universal_token_value[$token]=$value;
+						break; }
+						//
+						default: {
+							// This should not be possible
+							//
+							throw new phocus_fault('Unsupported collection', $collection);
+						break; }
+					} // switch ($collection)
 				} // foreach ($token_values as $token=>$value)
 				//
 				//
@@ -258,7 +370,7 @@
 		} // add_token_array()
 		//
 		//
-		public function add_token_radio($token_list, $value, $prefix, $default)
+		public function add_token_radio($token_list, $value, $prefix, $default, $collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -267,7 +379,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 4);
+				confirm_args($arg_count, 5);
 				//
 				//
 				//////////////////////
@@ -278,6 +390,17 @@
 				confirm_string($value);
 				confirm_string($prefix);
 				confirm_string($default);
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
 				//
 				//
 				////////////////////
@@ -291,7 +414,22 @@
 					$token=$token_prefix.strtoupper($v);
 					if ($value===$v)
 					{
-						$this->token_value[$token]='CHECKED';
+						switch ($collection)
+						{
+							case 'specific': {
+								$this->token_value[$token]='CHECKED';
+							break; }
+							//
+							case 'universal': {
+								$this->universal_token_value[$token]='CHECKED';
+							break; }
+							//
+							default: {
+								// This should not be possible
+								//
+								throw new phocus_fault('Unsupported collection', $collection);
+							break; }
+						} // switch ($collection)
 						$used=TRUE;
 					}
 					else
@@ -303,7 +441,22 @@
 				if ($used===FALSE)
 				{
 					$token=$token_prefix.strtoupper($defult);
-					$this->token_value[$token]='SELECTED';
+					switch ($collection)
+					{
+						case 'specific': {
+							$this->token_value[$token]='SELECTED';
+						break; }
+						//
+						case 'universal': {
+							$this->universal_token_value[$token]='SELECTED';
+						break; }
+						//
+						default: {
+							// This should not be possible
+							//
+							throw new phocus_fault('Unsupported collection', $collection);
+						break; }
+					} // switch ($collection)
 				} // if ($used===FALSE)
 				//
 				return;
@@ -315,7 +468,7 @@
 		} // add_token_radio()
 		//
 		//
-		public function add_token_select($token_list, $value, $prefix, $default)
+		public function add_token_select($token_list, $value, $prefix, $default, $collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -324,7 +477,7 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 4);
+				confirm_args($arg_count, 5);
 				//
 				//
 				//////////////////////
@@ -335,6 +488,17 @@
 				confirm_string($value);
 				confirm_string($prefix);
 				confirm_string($default);
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
 				//
 				//
 				////////////////////
@@ -348,7 +512,22 @@
 					$token=$token_prefix.strtoupper($v);
 					if ($value===$v)
 					{
-						$this->token_value[$token]='SELECTED';
+						switch ($collection)
+						{
+							case 'specific': {
+								$this->token_value[$token]='SELECTED';
+							break; }
+							//
+							case 'universal': {
+								$this->universal_token_value[$token]='SELECTED';
+							break; }
+							//
+							default: {
+								// This should not be possible
+								//
+								throw new phocus_fault('Unsupported collection', $collection);
+							break; }
+						} // switch ($collection)
 						$used=TRUE;
 					}
 					else
@@ -372,7 +551,7 @@
 		} // add_token_select()
 		//
 		//
-		public function clear()
+		public function clear($collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -381,15 +560,53 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 0);
+				confirm_args($arg_count, 1);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL) && ($collection!==phocus_template::ALL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL) && ($collection!==phocus_template::ALL))
 				//
 				//
 				////////////////////
 				// Clear snippets //
 				////////////////////
 				//
-				$this->clear_snippets();
-				$this->clear_tokens();
+				switch ($collection)
+				{
+					case 'all': {
+						$this->clear_snippets(phocus_template::ALL);
+						$this->clear_tokens(phocus_template::ALL);
+					break; }
+					//
+					case 'specific': {
+						$this->clear_snippets(phocus_template::SPECIFIC);
+						$this->clear_tokens(phocus_template::SPECIFIC);
+					break; }
+					//
+					case 'universal': {
+						$this->clear_snippets(phocus_template::UNIVERSAL);
+						$this->clear_tokens(phocus_template::UNIVERSAL);
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 				//
 				return;
 			}
@@ -400,7 +617,7 @@
 		} // clear ()
 		//
 		//
-		public function clear_snippets()
+		public function clear_snippets($collection=phocus_template::ALL)
 		{
 			try
 			{
@@ -409,14 +626,51 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 0);
+				confirm_args($arg_count, 1);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL) && ($collection!==phocus_template::ALL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL) && ($collection!==phocus_template::ALL))
 				//
 				//
 				////////////////////
 				// Clear snippets //
 				////////////////////
 				//
-				$this->snippet=array();
+				switch ($collection)
+				{
+					case 'all': {
+						$this->snippet=array();
+						$this->universal_snippet=array();
+					break; }
+					//
+					case 'specific': {
+						$this->snippet=array();
+					break; }
+					//
+					case 'universal': {
+						$this->universal_snippet=array();
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 				//
 				return;
 			}
@@ -427,7 +681,7 @@
 		} // clear_snippets()
 		//
 		//
-		public function clear_tokens()
+		public function clear_tokens($collection=phocus_template::ALL)
 		{
 			try
 			{
@@ -436,14 +690,51 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 0);
+				confirm_args($arg_count, 1);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($collection);
+				//
+				//
+				//////////////////
+				// Sanity check //
+				//////////////////
+				//
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL) && ($collection!==phocus_template::ALL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL) && ($collection!==phocus_template::ALL))
 				//
 				//
 				//////////////////
 				// Clear tokens //
 				//////////////////
 				//
-				$this->token_value=array();
+				switch ($collection)
+				{
+					case 'all': {
+						$this->token_value=array();
+						$this->universal_token_value=array();
+					break; }
+					//
+					case 'specific': {
+						$this->token_value=array();
+					break; }
+					//
+					case 'universal': {
+						$this->universal_token_value=array();
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 				//
 				return;
 			}
@@ -504,7 +795,7 @@
 		} // get_file_path()
 		//
 		//
-		public function get_snippet()
+		public function get_snippet($collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -513,14 +804,46 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 0);
+				confirm_args($arg_count, 1);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($collection);
 				//
 				//
 				//////////////////
-				// Clear tokens //
+				// Sanity check //
 				//////////////////
 				//
-				return $this->snippet;
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				//
+				//
+				/////////////////////
+				// Return snippets //
+				/////////////////////
+				//
+				switch ($collection)
+				{
+					case 'specific': {
+						return $this->snippet;
+					break; }
+					//
+					case 'universal': {
+						return $this->universal_snippet;
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 			}
 			catch (Throwable $e)
 			{
@@ -529,7 +852,7 @@
 		} // get_snippet()
 		//
 		//
-		public function get_token_value()
+		public function get_token_value($collection=phocus_template::SPECIFIC)
 		{
 			try
 			{
@@ -538,14 +861,46 @@
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				confirm_args($arg_count, 0);
+				confirm_args($arg_count, 1);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($collection);
 				//
 				//
 				//////////////////
-				// Clear tokens //
+				// Sanity check //
 				//////////////////
 				//
-				return $this->token_value;
+				if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				{
+					throw new phocus_fault('Invalid collection', $collection);
+				} // if (($collection!==phocus_template::SPECIFIC) && ($collection!==phocus_template::UNIVERSAL))
+				//
+				//
+				///////////////////
+				// Return tokens //
+				///////////////////
+				//
+				switch ($collection)
+				{
+					case 'specific': {
+						return $this->token_value;
+					break; }
+					//
+					case 'universal': {
+						return $this->universal_token_value;
+					break; }
+					//
+					default: {
+						// This should not be possible
+						//
+						throw new phocus_fault('Unsupported collection', $collection);
+					break; }
+				} // switch ($collection)
 			}
 			catch (Throwable $e)
 			{
@@ -577,6 +932,7 @@
 					// Strict mode
 					//
 					$unused=array();
+					//
 					foreach ($this->snippet as $token=>$HTML)
 					{
 						$rendition2=str_replace("#{$token}#", $HTML, $rendition);
@@ -596,6 +952,30 @@
 						if ($rendition2==$rendition)
 						{
 							$unused[]='TOKEN:'.$token;
+						} // if ($rendition2==$rendition)
+						//
+						$rendition=$rendition2;
+					} // foreach ($token_value as $token=>$value)
+					//
+					foreach ($this->universal_snippet as $token=>$HTML)
+					{
+						$rendition2=str_replace("#{$token}#", $HTML, $rendition);
+						//
+						if ($rendition2==$rendition)
+						{
+							$unused[]='UNIVERSAL SNIPPET:'.$token;
+						} // if ($rendition2==$rendition)
+						//
+						$rendition=$rendition2;
+					} // foreach ($token_value as $token=>$value)
+					//
+					foreach ($this->universal_token_value as $token=>$value)
+					{
+						$rendition2=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
+						//
+						if ($rendition2==$rendition)
+						{
+							$unused[]='UNIVERAL TOKEN:'.$token;
 						} // if ($rendition2==$rendition)
 						//
 						$rendition=$rendition2;
@@ -642,6 +1022,16 @@
 					} // foreach ($token_value as $token=>$value)
 					//
 					foreach ($this->token_value as $token=>$value)
+					{
+						$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
+					} // foreach ($token_value as $token=>$value)
+					//
+					foreach ($this->universal_snippet as $token=>$HTML)
+					{
+						$rendition=str_replace("#{$token}#", $HTML, $rendition);
+					} // foreach ($token_value as $token=>$value)
+					//
+					foreach ($this->universal_token_value as $token=>$value)
 					{
 						$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
 					} // foreach ($token_value as $token=>$value)
