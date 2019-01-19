@@ -299,6 +299,51 @@
 		} // add_token()
 		//
 		//
+		public static function add_universal_token($token, $value)
+		{
+			try
+			{
+				//////////////////////////
+				// Check argument count //
+				//////////////////////////
+				//
+				$arg_count=func_num_args();
+				confirm_args($arg_count, 2);
+				//
+				//
+				//////////////////////
+				// Check data types //
+				//////////////////////
+				//
+				confirm_string($token);
+				confirm_mixed($value, 'NDIS');
+				//
+				//
+				///////////////////
+				// Normalization //
+				///////////////////
+				//
+				if ($value===NULL)
+				{
+					$value='';
+				}
+				//
+				///////////////////
+				// Add the token //
+				///////////////////
+				//
+				$this->universal_token_value[$token]=$value;
+				//
+				//
+				return;
+			}
+			catch (Throwable $e)
+			{
+				throw new phocus_fault('Could not add universal token', origin(), $e);
+			} // try
+		} // add_universal_token()
+		//
+		//
 		public function add_token_array($token_values, $collection=phocus_template::SPECIFIC)
 		{
 			try
