@@ -332,7 +332,7 @@
 				// Add the token //
 				///////////////////
 				//
-				$this->universal_token_value[$token]=$value;
+				phocus_template::universal_token_value[$token]=$value;
 				//
 				//
 				return;
