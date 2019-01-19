@@ -51,7 +51,7 @@
 				{
 					throw new phocus_fault('Unknown set', $set);
 				}
-				if (($check!==phocus_template::STRICT) && ($check!==phocus_template::PERMISSIVE))
+				if (($mode!==phocus_template::STRICT) && ($mode!==phocus_template::PERMISSIVE))
 				{
 					throw new phocus_fault('Unknown mode', $mode);
 				}
