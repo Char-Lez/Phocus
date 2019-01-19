@@ -10,7 +10,6 @@
 		private $ini;
 		private $modules;
 		private $permission;
-		private $require_authentication;
 		protected $user_id;
 		//
 		//
@@ -423,13 +422,13 @@
 				// Initialize the object //
 				///////////////////////////
 				//
-				$this->require_authentication=FALSE;
+				// No code here (override!)
 				//
 				return;
 			}
 			catch (Throwable $e)
 			{
-				throw new phocus_fault('Could not load modules', origin(), $e);
+				throw new phocus_fault('Could not initialize', origin(), $e);
 			} // try
 		} // initialize()
 		//
