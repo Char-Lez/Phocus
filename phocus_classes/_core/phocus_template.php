@@ -7,50 +7,26 @@
 		const APPLICATION='application';
 		const CORE='core';
 		const STRICT='strict';
-		const LOOSE='loose';
+		const PERMISSIVE='permissive';
 		//
 		private $content;
 		private $file_path;
 		private $snippet;
-		private $strict;
+		private $mode;
 		private $token_value;
 		//
-		public function __construct($file_name, $set=phocus_template::APPLICATION, $check=phocus_template::STRICT)
+		public function __construct($file_name, $set=phocus_template::APPLICATION, $mode=phocus_template::STRICT)
 		{
 			try
 			{
-			  global $application_name;
-			  //
+				global $application_name;
+				//
 				//////////////////////////
 				// Check argument count //
 				//////////////////////////
 				//
 				$arg_count=func_num_args();
-				/*
-				switch ($arg_count)
-				{
-					case 1: {
-						$file_name=func_get_arg(0);
-						$set=phocus_template::APPLICATION;
-						$sub=application_name().'/';
-					break; }
-					//
-					case 2: {
-						$file_name=func_get_arg(0);
-						$set=func_get_arg(1);
-					break; }
-					//
-					case 3: {
-						$file_name=func_get_arg(0);
-						$set=func_get_arg(1);
-						$strict=func_get_arg(2);
-					break; }
-					//
-					default: {
-						throw new phocus_fault('Invalid argument count', $arg_count);
-					break; }
-				} // switch ($arg_count)
-				*/
+				//
 				if (($arg_count<1) || ($arg_count>3))
 				{
 					throw new phocus_fault('Invalid argument count', $arg_count);
@@ -63,7 +39,7 @@
 				//
 				confirm_string($file_name);
 				confirm_string($set);
-				confirm_string($check);
+				confirm_string($mode);
 				//
 				//
 				//////////////////
@@ -75,13 +51,13 @@
 				{
 					throw new phocus_fault('Unknown set', $set);
 				}
-				if (($check!==phocus_template::STRICT) && ($check!==phocus_template::LOOSE))
+				if (($check!==phocus_template::STRICT) && ($check!==phocus_template::PERMISSIVE))
 				{
-					throw new phocus_fault('Unknown check', $check);
+					throw new phocus_fault('Unknown mode', $mode);
 				}
 				//
 				//
-				// Determine subdirectoy based on set
+				// Determine subdirectory based on set
 				if ($set===phocus_template::CORE)
 				{
 				  $sub='_core/';
@@ -99,6 +75,13 @@
 				$this->file_path='../phocus_templates/'.$sub.$file_name;
 				$this->content=file_read($this->file_path);
 				//
+				// Does the template have data?
+				if (strlen($this->content)===0)
+				{
+					// No, it is empty
+					//
+					throw new phocus_fault('Empty template', $this->file_path);
+				} // if (strlen($this->content)===0)
 				//
 				///////////////////////////
 				// Initialize properties //
@@ -106,7 +89,7 @@
 				//
 				$this->token_value=array();
 				$this->snippet=array();
-				$this->strict=$check;
+				$this->mode=$mode;
 				//
 				return;
 			}
@@ -589,9 +572,9 @@
 				//
 				$rendition=$this->content;
 				//
-				if ($this->strict===TRUE)
+				if ($this->mode===phocus_template::STRICT)
 				{
-					// strict mode
+					// Strict mode
 					//
 					$unused=array();
 					foreach ($this->snippet as $token=>$HTML)
@@ -662,7 +645,7 @@
 					{
 						$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
 					} // foreach ($token_value as $token=>$value)
-				} // if ($this->strict===TRUE)
+				} // if ($this->mode===phocus_template::STRICT)
 				//
 				return $rendition;
 			}
@@ -671,30 +654,5 @@
 				throw new phocus_fault('Could not render template', origin(), $e);
 			} // try
 		} // render()
-		//
-		//
-		/*
-		private function render_substitutions($rendition)
-		{
-			try
-			{
-				foreach ($this->snippet as $token=>$HTML)
-				{
-					$rendition=str_replace("#{$token}#", $HTML, $rendition);
-				} // foreach ($token_value as $token=>$value)
-				//
-				foreach ($this->token_value as $token=>$value)
-				{
-					$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
-				} // foreach ($token_value as $token=>$value)
-				//
-				return $rendition;
-			}
-			catch (Throwable $e)
-			{
-				throw new phocus_fault('Could not do substitutions', origin(), $e);
-			} // try
-		} // render_substitutions()
-		*/
 	} // template
 ?>
