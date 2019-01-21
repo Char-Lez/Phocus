@@ -148,7 +148,7 @@
 					break; }
 					//
 					case 'universal': {
-						$this->universal_snippet[$token]=$snippet->render();
+						phocus_template::$universal_snippet[$token]=$snippet->render();
 					break; }
 					//
 					default: {
@@ -209,7 +209,7 @@
 					break; }
 					//
 					case 'universal': {
-						$this->universal_snippet[$token].=$snippet->render();
+						phocus_template::$universal_snippet[$token].=$snippet->render();
 					break; }
 					//
 					default: {
@@ -279,7 +279,7 @@
 					break; }
 					//
 					case 'universal': {
-						$this->universal_token_value[$token]=$value;
+						phocus_template::$universal_token_value[$token]=$value;
 					break; }
 					//
 					default: {
@@ -332,7 +332,7 @@
 				// Add the token //
 				///////////////////
 				//
-				phocus_template::universal_token_value[$token]=$value;
+				phocus_template::$universal_token_value[$token]=$value; 
 				//
 				//
 				return;
@@ -394,7 +394,7 @@
 						break; }
 						//
 						case 'universal': {
-							$this->universal_token_value[$token]=$value;
+							phocus_template::$universal_token_value[$token]=$value;
 						break; }
 						//
 						default: {
@@ -466,7 +466,7 @@
 							break; }
 							//
 							case 'universal': {
-								$this->universal_token_value[$token]='CHECKED';
+								phocus_template::$universal_token_value[$token]='CHECKED';
 							break; }
 							//
 							default: {
@@ -493,7 +493,7 @@
 						break; }
 						//
 						case 'universal': {
-							$this->universal_token_value[$token]='SELECTED';
+							phocus_template::$universal_token_value[$token]='SELECTED';
 						break; }
 						//
 						default: {
@@ -564,7 +564,7 @@
 							break; }
 							//
 							case 'universal': {
-								$this->universal_token_value[$token]='SELECTED';
+								phocus_template::$universal_token_value[$token]='SELECTED';
 							break; }
 							//
 							default: {
@@ -699,7 +699,7 @@
 				{
 					case 'all': {
 						$this->snippet=array();
-						$this->universal_snippet=array();
+						phocus_template::$universal_snippet=array();
 					break; }
 					//
 					case 'specific': {
@@ -707,7 +707,7 @@
 					break; }
 					//
 					case 'universal': {
-						$this->universal_snippet=array();
+						phocus_template::$universal_snippet=array();
 					break; }
 					//
 					default: {
@@ -763,7 +763,7 @@
 				{
 					case 'all': {
 						$this->token_value=array();
-						$this->universal_token_value=array();
+						phocus_template::$universal_token_value=array();
 					break; }
 					//
 					case 'specific': {
@@ -771,7 +771,7 @@
 					break; }
 					//
 					case 'universal': {
-						$this->universal_token_value=array();
+						phocus_template::$universal_token_value=array();
 					break; }
 					//
 					default: {
@@ -880,7 +880,7 @@
 					break; }
 					//
 					case 'universal': {
-						return $this->universal_snippet;
+						return phocus_template::$universal_snippet;
 					break; }
 					//
 					default: {
@@ -937,7 +937,7 @@
 					break; }
 					//
 					case 'universal': {
-						return $this->universal_token_value;
+						return phocus_template::$universal_token_value;
 					break; }
 					//
 					default: {
@@ -1002,7 +1002,7 @@
 						$rendition=$rendition2;
 					} // foreach ($token_value as $token=>$value)
 					//
-					foreach ($this->universal_snippet as $token=>$HTML)
+					foreach (phocus_template::$universal_snippet as $token=>$HTML)
 					{
 						$rendition2=str_replace("#{$token}#", $HTML, $rendition);
 						//
@@ -1014,7 +1014,7 @@
 						$rendition=$rendition2;
 					} // foreach ($token_value as $token=>$value)
 					//
-					foreach ($this->universal_token_value as $token=>$value)
+					foreach (phocus_template::$universal_token_value as $token=>$value)
 					{
 						$rendition2=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
 						//
@@ -1036,7 +1036,7 @@
 					} // if (count($unused)!==0)
 					//
 					$matches=array();
-					$match_count=preg_match_all("/#(.*?)#/i", $rendition, $matches);
+					$match_count=preg_match_all("/#([a-zA-Z0-9_]*?)#/i", $rendition, $matches);
 					//
 					if ($match_count===FALSE)
 					{
@@ -1071,12 +1071,12 @@
 						$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
 					} // foreach ($token_value as $token=>$value)
 					//
-					foreach ($this->universal_snippet as $token=>$HTML)
+					foreach (phocus_template::$universal_snippet as $token=>$HTML)
 					{
 						$rendition=str_replace("#{$token}#", $HTML, $rendition);
 					} // foreach ($token_value as $token=>$value)
 					//
-					foreach ($this->universal_token_value as $token=>$value)
+					foreach (phocus_template::$universal_token_value as $token=>$value)
 					{
 						$rendition=str_replace("#{$token}#", htmlspecialchars($value), $rendition);
 					} // foreach ($token_value as $token=>$value)
